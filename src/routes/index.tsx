@@ -5,6 +5,7 @@ import Globe from "@/components/Globe";
 import DrillDescent from "@/components/DrillDescent";
 import { antipode, describe, formatCoord, type Point, type Verdict } from "@/lib/geo";
 import heroImage from "@/assets/earth-core-hero.jpg";
+import AdSlot from "@/components/AdSlot";
 
 
 export const Route = createFileRoute("/")({
@@ -89,6 +90,9 @@ function Index() {
         </div>
       </section>
 
+      <div className="mx-auto max-w-6xl px-6 pt-8">
+        <AdSlot slot="" label="Advertisement" minHeight={120} />
+      </div>
 
       <section className="mx-auto grid max-w-6xl gap-10 px-6 py-12 lg:grid-cols-[1.4fr_1fr]">
         <div>
@@ -159,8 +163,14 @@ function Index() {
               in the Indian Ocean.
             </p>
           </div>
+
+          <AdSlot slot="" label="Advertisement" minHeight={260} />
         </aside>
       </section>
+
+      <div className="mx-auto max-w-6xl px-6 pb-12">
+        <AdSlot slot="" label="Advertisement" minHeight={120} />
+      </div>
 
       <footer className="border-t border-border px-6 py-8">
         <p className="mx-auto max-w-6xl font-mono text-xs text-muted-foreground">
