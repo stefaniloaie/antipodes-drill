@@ -5,6 +5,7 @@ import Globe from "@/components/Globe";
 import DrillDescent from "@/components/DrillDescent";
 import { antipode, describe, formatCoord, type Point, type Verdict } from "@/lib/geo";
 import heroImage from "@/assets/earth-core-hero.jpg";
+import AdSlot from "@/components/AdSlot";
 
 
 export const Route = createFileRoute("/")({
