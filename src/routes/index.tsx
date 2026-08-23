@@ -88,22 +88,20 @@ function Index() {
 
       <section className="mx-auto grid max-w-6xl gap-10 px-6 py-12 lg:grid-cols-[1.4fr_1fr]">
         <div>
-          <div className="mb-4 rounded-lg border border-border bg-card p-4 shadow-sm">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
             <p className="mono-label text-muted-foreground">Click anywhere to drop the drill</p>
-            <p className="mt-3 mono-label text-primary">Or start from a city</p>
-            <div className="mt-2 flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2">
               {PRESETS.map((x) => (
                 <button
                   key={x.label}
                   onClick={() => drill(x.p, x.label)}
-                  className="rounded-full border border-primary/40 bg-primary/10 px-4 py-2 font-mono text-sm font-medium text-foreground shadow-sm transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"
+                  className="rounded-full border border-border bg-card px-3 py-1 font-mono text-xs text-muted-foreground transition-colors hover:border-primary hover:text-primary"
                 >
                   {x.label}
                 </button>
               ))}
             </div>
           </div>
-
           <div className="overflow-hidden rounded-lg border border-border bg-card shadow-sm">
             <WorldMap onPick={(p) => drill(p)} origin={origin} target={target} />
           </div>
