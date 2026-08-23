@@ -4,9 +4,7 @@ import WorldMap from "@/components/WorldMap";
 import Globe from "@/components/Globe";
 import DrillDescent from "@/components/DrillDescent";
 import { antipode, describe, formatCoord, type Point, type Verdict } from "@/lib/geo";
-import heroImage from "@/assets/earth-core-hero.jpg";
 import AdSlot from "@/components/AdSlot";
-
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -66,19 +64,13 @@ function Index() {
     <main className="min-h-screen">
       {drilling && <DrillDescent onDone={finish} />}
 
-      <section className="relative overflow-hidden border-b border-border">
-        <img
-          src={heroImage}
-          alt="Cinematic cross-section of Earth showing crust, mantle and a glowing molten inner core with a drill shaft punching through"
-          width={1920}
-          height={1088}
-          className="pointer-events-none absolute inset-0 h-full w-full object-cover object-top opacity-60"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/30" />
+      <section className="relative overflow-hidden border-b border-border bg-card">
+        <div className="absolute inset-0 topo opacity-70" />
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-transparent to-muted/50" />
         <div className="absolute inset-0 grain opacity-40" />
-        <div className="relative mx-auto max-w-6xl px-6 pb-10 pt-16 sm:pt-24">
+        <div className="relative mx-auto max-w-6xl px-6 pb-12 pt-16 sm:pt-24">
           <p className="mono-label text-primary">12 742 km · straight down · no detours</p>
-          <h1 className="mt-4 max-w-3xl text-5xl leading-[0.95] drop-shadow-[0_2px_30px_rgba(0,0,0,0.6)] sm:text-7xl">
+          <h1 className="mt-4 max-w-3xl text-5xl leading-[0.95] text-foreground sm:text-7xl">
             Dig a hole to the
             <span className="block text-primary">other side of Earth.</span>
           </h1>
@@ -103,21 +95,21 @@ function Index() {
                 <button
                   key={x.label}
                   onClick={() => drill(x.p, x.label)}
-                  className="rounded-full border border-border px-3 py-1 font-mono text-xs text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                  className="rounded-full border border-border bg-card px-3 py-1 font-mono text-xs text-muted-foreground transition-colors hover:border-primary hover:text-primary"
                 >
                   {x.label}
                 </button>
               ))}
             </div>
           </div>
-          <div className="overflow-hidden rounded-lg border border-border bg-card">
+          <div className="overflow-hidden rounded-lg border border-border bg-card shadow-sm">
             <WorldMap onPick={(p) => drill(p)} origin={origin} target={target} />
           </div>
         </div>
 
         <aside className="flex flex-col gap-6">
           {!verdict && (
-            <div className="rounded-lg border border-dashed border-border p-8 text-center">
+            <div className="rounded-lg border border-dashed border-border bg-card p-8 text-center">
               <p className="mono-label text-muted-foreground">Awaiting coordinates</p>
               <p className="mt-3 text-sm text-muted-foreground">
                 Pick a spot. The drill descends through five layers of Earth and re-emerges at your
@@ -128,15 +120,15 @@ function Index() {
 
           {verdict && origin && target && (
             <>
-              <div className="rounded-lg border border-border bg-card p-6">
+              <div className="rounded-lg border border-border bg-card p-6 shadow-sm">
                 <p className="mono-label text-muted-foreground">You dug from</p>
-                <p className="mt-1 text-xl">{label ?? originName}</p>
+                <p className="mt-1 text-xl text-foreground">{label ?? originName}</p>
                 <p className="font-mono text-xs text-muted-foreground">{formatCoord(origin)}</p>
 
                 <div className="my-5 h-px w-full bg-border" />
 
                 <p className="mono-label text-primary">You surface at</p>
-                <h2 className="mt-1 text-3xl leading-tight">{verdict.place}</h2>
+                <h2 className="mt-1 text-3xl leading-tight text-foreground">{verdict.place}</h2>
                 <p className="font-mono text-xs text-muted-foreground">{formatCoord(target)}</p>
 
                 <p className="mt-5 text-sm text-muted-foreground">
@@ -146,7 +138,7 @@ function Index() {
                 </p>
               </div>
 
-              <div className="flex flex-col items-center rounded-lg border border-border bg-card p-6">
+              <div className="flex flex-col items-center rounded-lg border border-border bg-card p-6 shadow-sm">
                 <p className="mono-label mb-3 self-start text-muted-foreground">
                   Exit point · globe view
                 </p>
@@ -155,7 +147,7 @@ function Index() {
             </>
           )}
 
-          <div className="rounded-lg border border-border p-6">
+          <div className="rounded-lg border border-border bg-card p-6 shadow-sm">
             <p className="mono-label text-muted-foreground">Why the myth is wrong</p>
             <p className="mt-3 text-sm text-muted-foreground">
               China sits in the northern hemisphere, same as Europe and North America. An antipode
@@ -172,7 +164,7 @@ function Index() {
         <AdSlot slot="" label="Advertisement" minHeight={120} />
       </div>
 
-      <footer className="border-t border-border px-6 py-8">
+      <footer className="border-t border-border bg-card px-6 py-8">
         <p className="mx-auto max-w-6xl font-mono text-xs text-muted-foreground">
           Earth radius 6 371 km · core ≈ 5 400 °C · antipode = (−lat, lng ± 180°)
         </p>

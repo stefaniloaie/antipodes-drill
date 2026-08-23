@@ -55,11 +55,11 @@ export default function AdSlot({
 
   return (
     <div
-      className={`overflow-hidden rounded-lg border border-dashed border-border/70 bg-card/40 ${className}`}
+      className={`overflow-hidden rounded-lg border border-dashed border-border bg-card/60 ${className}`}
       style={{ minHeight }}
       aria-label={label}
     >
-      <p className="mono-label px-3 pt-2 text-[10px] tracking-widest text-muted-foreground/60">
+      <p className="mono-label px-3 pt-2 text-[10px] tracking-widest text-muted-foreground/70">
         {label}
       </p>
       {active ? (
@@ -74,7 +74,7 @@ export default function AdSlot({
         />
       ) : (
         <div
-          className="flex items-center justify-center px-3 pb-3 text-xs text-muted-foreground/50"
+          className="flex items-center justify-center px-3 pb-3 text-xs text-muted-foreground/60"
           style={{ minHeight: minHeight - 30 }}
         >
           Ad slot reserved

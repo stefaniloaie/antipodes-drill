@@ -55,9 +55,9 @@ export default function Globe({ target, spin = true }: { target: Point; spin?: b
           <stop offset="100%" stopColor="var(--background)" />
         </radialGradient>
       </defs>
-      <circle cx={SIZE / 2} cy={SIZE / 2} r={SIZE / 2 - 4} fill="var(--ocean-deep)" opacity={0.25} />
+      <circle cx={SIZE / 2} cy={SIZE / 2} r={SIZE / 2 - 4} fill="var(--ocean-deep)" opacity={0.2} />
       <path d={sphere} fill="url(#globeShade)" stroke="var(--border)" />
-      <path d={grat} fill="none" stroke="var(--ocean)" strokeWidth={0.4} opacity={0.6} />
+      <path d={grat} fill="none" stroke="var(--ocean)" strokeWidth={0.45} opacity={0.5} />
       {land.map((d, i) => (
         <path key={i} d={d} fill="var(--land)" stroke="var(--background)" strokeWidth={0.3} />
       ))}
