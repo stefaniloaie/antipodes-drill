@@ -163,8 +163,14 @@ function Index() {
               in the Indian Ocean.
             </p>
           </div>
+
+          <AdSlot slot="" label="Advertisement" minHeight={260} />
         </aside>
       </section>
+
+      <div className="mx-auto max-w-6xl px-6 pb-12">
+        <AdSlot slot="" label="Advertisement" minHeight={120} />
+      </div>
 
       <footer className="border-t border-border px-6 py-8">
         <p className="mx-auto max-w-6xl font-mono text-xs text-muted-foreground">
