@@ -5,9 +5,9 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Antipodes Earth Drill — design system.
- * Basalt-dark geology with magma heat and abyssal ocean accents.
- * All colors are oklch tokens. Never hardcode colors in components.
+ * Antipodes Earth Drill — Luminous Lithosphere design system.
+ * Bright, airy geological interface: alabaster stone, cyan core energy,
+ * warm landmasses and sunlit oceans. All colors are oklch tokens.
  */
 
 @theme inline {
@@ -51,40 +51,40 @@
 }
 
 :root {
-  --radius: 0.25rem;
+  --radius: 0.5rem;
 
-  --background: oklch(0.16 0.018 60);
-  --foreground: oklch(0.94 0.012 80);
-  --card: oklch(0.21 0.02 62);
-  --card-foreground: oklch(0.94 0.012 80);
-  --popover: oklch(0.21 0.02 62);
-  --popover-foreground: oklch(0.94 0.012 80);
+  --background: oklch(0.98 0.004 80);
+  --foreground: oklch(0.28 0.02 70);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.28 0.02 70);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.28 0.02 70);
 
-  --primary: oklch(0.72 0.19 48);
-  --primary-foreground: oklch(0.18 0.03 50);
-  --secondary: oklch(0.27 0.022 62);
-  --secondary-foreground: oklch(0.92 0.012 80);
-  --muted: oklch(0.25 0.018 62);
-  --muted-foreground: oklch(0.68 0.02 70);
-  --accent: oklch(0.74 0.14 205);
-  --accent-foreground: oklch(0.17 0.03 220);
+  --primary: oklch(0.58 0.16 205);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.95 0.01 80);
+  --secondary-foreground: oklch(0.35 0.02 70);
+  --muted: oklch(0.94 0.01 80);
+  --muted-foreground: oklch(0.55 0.02 70);
+  --accent: oklch(0.72 0.14 80);
+  --accent-foreground: oklch(0.25 0.02 70);
   --destructive: oklch(0.6 0.22 27);
   --destructive-foreground: oklch(0.97 0.01 80);
-  --border: oklch(0.31 0.022 62);
-  --input: oklch(0.31 0.022 62);
-  --ring: oklch(0.72 0.19 48);
+  --border: oklch(0.88 0.01 80);
+  --input: oklch(0.88 0.01 80);
+  --ring: oklch(0.58 0.16 205);
 
-  /* Geology */
-  --crust: oklch(0.42 0.05 60);
-  --mantle-upper: oklch(0.5 0.13 40);
-  --mantle-lower: oklch(0.6 0.17 45);
-  --outer-core: oklch(0.75 0.2 62);
-  --inner-core: oklch(0.93 0.16 92);
+  /* Geology — sunlit strata */
+  --crust: oklch(0.62 0.05 70);
+  --mantle-upper: oklch(0.7 0.1 55);
+  --mantle-lower: oklch(0.78 0.14 60);
+  --outer-core: oklch(0.85 0.18 75);
+  --inner-core: oklch(0.93 0.16 85);
 
   /* Water & land */
-  --ocean: oklch(0.5 0.09 226);
-  --ocean-deep: oklch(0.29 0.06 240);
-  --land: oklch(0.36 0.03 70);
+  --ocean: oklch(0.78 0.08 205);
+  --ocean-deep: oklch(0.62 0.07 220);
+  --land: oklch(0.72 0.06 75);
 }
 
 @layer base {
@@ -129,21 +129,26 @@
 @utility grain {
   background-image: radial-gradient(
     circle at 1px 1px,
-    color-mix(in oklab, var(--foreground) 9%, transparent) 1px,
+    color-mix(in oklab, var(--foreground) 6%, transparent) 1px,
     transparent 0
   );
   background-size: 4px 4px;
 }
 
+@utility topo {
+  background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 100 C 40 60, 80 140, 120 100 S 180 60, 200 100' fill='none' stroke='black' stroke-width='0.5' opacity='0.06'/%3E%3Cpath d='M0 120 C 50 90, 90 150, 140 120 S 190 90, 200 120' fill='none' stroke='black' stroke-width='0.5' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 400px 400px;
+}
+
 @utility strata {
   background-image: repeating-linear-gradient(
     to bottom,
-    color-mix(in oklab, black 22%, transparent) 0px,
-    color-mix(in oklab, black 22%, transparent) 3px,
+    color-mix(in oklab, black 12%, transparent) 0px,
+    color-mix(in oklab, black 12%, transparent) 3px,
     transparent 3px,
     transparent 26px,
-    color-mix(in oklab, white 8%, transparent) 26px,
-    color-mix(in oklab, white 8%, transparent) 28px,
+    color-mix(in oklab, white 18%, transparent) 26px,
+    color-mix(in oklab, white 18%, transparent) 28px,
     transparent 28px,
     transparent 64px
   );
@@ -152,7 +157,7 @@
 @utility streaks {
   background-image: repeating-linear-gradient(
     to bottom,
-    color-mix(in oklab, white 14%, transparent) 0px,
+    color-mix(in oklab, white 24%, transparent) 0px,
     transparent 2px,
     transparent 90px
   );
@@ -174,7 +179,6 @@
     transform: translate3d(calc(-1px * var(--shake, 1)), calc(-1.5px * var(--shake, 1)), 0);
   }
 }
-
 
 @keyframes ember-rise {
   0% {
