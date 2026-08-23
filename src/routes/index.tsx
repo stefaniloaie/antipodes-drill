@@ -90,6 +90,9 @@ function Index() {
         </div>
       </section>
 
+      <div className="mx-auto max-w-6xl px-6 pt-8">
+        <AdSlot slot="" label="Advertisement" minHeight={120} />
+      </div>
 
       <section className="mx-auto grid max-w-6xl gap-10 px-6 py-12 lg:grid-cols-[1.4fr_1fr]">
         <div>
