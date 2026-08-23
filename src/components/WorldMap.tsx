@@ -58,8 +58,8 @@ export default function WorldMap({
     >
       <defs>
         <radialGradient id="oceanGrad" cx="50%" cy="38%" r="78%">
-          <stop offset="0%" stopColor="var(--ocean)" stopOpacity={0.55} />
-          <stop offset="55%" stopColor="var(--ocean-deep)" stopOpacity={1} />
+          <stop offset="0%" stopColor="var(--ocean)" stopOpacity={0.75} />
+          <stop offset="55%" stopColor="var(--ocean-deep)" stopOpacity={0.9} />
           <stop offset="100%" stopColor="var(--background)" stopOpacity={1} />
         </radialGradient>
         <linearGradient id="landGrad" x1="0" y1="0" x2="0" y2="1">
@@ -68,10 +68,10 @@ export default function WorldMap({
         </linearGradient>
         <radialGradient id="vignette" cx="50%" cy="50%" r="72%">
           <stop offset="60%" stopColor="var(--background)" stopOpacity={0} />
-          <stop offset="100%" stopColor="var(--background)" stopOpacity={0.85} />
+          <stop offset="100%" stopColor="var(--background)" stopOpacity={0.75} />
         </radialGradient>
         <filter id="landRelief" x="-20%" y="-20%" width="140%" height="140%">
-          <feDropShadow dx="0" dy="1.2" stdDeviation="1.4" floodColor="#000" floodOpacity="0.6" />
+          <feDropShadow dx="0" dy="1.2" stdDeviation="1.4" floodColor="#000" floodOpacity={0.18} />
         </filter>
         <filter id="markerGlow" x="-300%" y="-300%" width="700%" height="700%">
           <feGaussianBlur stdDeviation="3" result="b" />
@@ -83,7 +83,7 @@ export default function WorldMap({
       </defs>
 
       <rect width={W} height={H} fill="url(#oceanGrad)" />
-      <path d={graticule} fill="none" stroke="var(--ocean)" strokeWidth={0.35} opacity={0.28} />
+      <path d={graticule} fill="none" stroke="var(--ocean)" strokeWidth={0.45} opacity={0.35} />
 
       <g filter="url(#landRelief)">
         {paths.map(({ d, i }) => (
@@ -92,7 +92,7 @@ export default function WorldMap({
             d={d}
             fill="url(#landGrad)"
             stroke="var(--primary)"
-            strokeOpacity={0.25}
+            strokeOpacity={0.35}
             strokeWidth={0.4}
             className="transition-[fill-opacity] duration-200 hover:fill-[var(--crust)]"
           />
@@ -109,9 +109,9 @@ export default function WorldMap({
           x2={t[0]}
           y2={t[1]}
           stroke="var(--primary)"
-          strokeWidth={1}
+          strokeWidth={1.2}
           strokeDasharray="4 4"
-          opacity={0.6}
+          opacity={0.65}
           filter="url(#markerGlow)"
         />
       )}
