@@ -56,7 +56,7 @@ export default function DrillDescent({ onDone }: { onDone: () => void }) {
 
         {/* strata bands scrolling past for parallax depth */}
         <div
-          className="strata absolute inset-x-0 h-[800vh] opacity-40 mix-blend-overlay will-change-transform"
+          className="strata absolute inset-x-0 h-[800vh] opacity-30 mix-blend-multiply will-change-transform"
           style={{ top: 0, transform: `translateY(${-p * 420}vh)` }}
         />
 
@@ -67,7 +67,7 @@ export default function DrillDescent({ onDone }: { onDone: () => void }) {
         />
       </div>
 
-      <div className="absolute inset-0 grain opacity-30" />
+      <div className="absolute inset-0 grain opacity-20" />
       <div
         className="absolute inset-0"
         style={{
@@ -75,12 +75,12 @@ export default function DrillDescent({ onDone }: { onDone: () => void }) {
         }}
       />
 
-      {/* cinematic vignette + chromatic edge */}
+      {/* soft vignette */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 50%, transparent 35%, color-mix(in oklab, black 78%, transparent) 100%)",
+            "radial-gradient(ellipse at 50% 50%, transparent 35%, color-mix(in oklab, var(--foreground) 55%, transparent) 100%)",
         }}
       />
 
@@ -126,25 +126,24 @@ export default function DrillDescent({ onDone }: { onDone: () => void }) {
       </div>
 
       {/* letterbox bars */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[7vh] bg-[oklch(0.06_0_0)]" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[7vh] bg-[oklch(0.06_0_0)]" />
-
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[7vh] bg-[oklch(0.2_0.02_70)]" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[7vh] bg-[oklch(0.2_0.02_70)]" />
 
       {/* HUD */}
       <div className="absolute inset-x-0 top-0 p-6 sm:p-10">
-        <p className="mono-label text-primary-foreground/70 mix-blend-difference">
+        <p className="mono-label text-primary-foreground/80 mix-blend-difference">
           Drill telemetry
         </p>
         <div className="mt-3 flex flex-wrap items-end gap-x-10 gap-y-3">
           <div>
-            <div className="font-mono text-4xl tabular-nums sm:text-6xl">
+            <div className="font-mono text-4xl tabular-nums text-foreground sm:text-6xl">
               {Math.round(depth).toLocaleString()}
               <span className="ml-1 text-xl">km</span>
             </div>
             <p className="mono-label opacity-70">depth travelled</p>
           </div>
           <div>
-            <div className="font-mono text-2xl tabular-nums sm:text-4xl">
+            <div className="font-mono text-2xl tabular-nums text-foreground sm:text-4xl">
               {temp.toLocaleString()} °C
             </div>
             <p className="mono-label opacity-70">skin temperature</p>
@@ -153,9 +152,9 @@ export default function DrillDescent({ onDone }: { onDone: () => void }) {
       </div>
 
       <div className="absolute inset-x-0 bottom-0 p-6 sm:p-10">
-        <div className="max-w-lg rounded-lg border border-border/60 bg-background/70 p-5 backdrop-blur-md">
+        <div className="max-w-lg rounded-lg border border-border/60 bg-card/80 p-5 backdrop-blur-md">
           <p className="mono-label text-primary">{layer.temp}</p>
-          <h2 className="mt-1 text-2xl">{layer.name}</h2>
+          <h2 className="mt-1 text-2xl text-foreground">{layer.name}</h2>
           <p className="mt-1 text-sm text-muted-foreground">{layer.note}</p>
         </div>
         <div className="mt-5 h-[3px] w-full bg-border">
