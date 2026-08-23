@@ -1,0 +1,3 @@
+# ads.txt — authorized digital sellers (IAB Tech Lab spec)
+# Replace pub-0000000000000000 with your AdSense publisher ID (digits after "ca-").
+google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
