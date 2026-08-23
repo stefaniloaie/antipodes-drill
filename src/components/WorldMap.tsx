@@ -56,20 +56,51 @@ export default function WorldMap({
       role="img"
       aria-label="World map — click any point to drill through the Earth"
     >
-      <rect width={W} height={H} fill="var(--ocean-deep)" />
-      <path d={graticule} fill="none" stroke="var(--ocean)" strokeWidth={0.4} opacity={0.5} />
-      <g>
+      <defs>
+        <radialGradient id="oceanGrad" cx="50%" cy="38%" r="78%">
+          <stop offset="0%" stopColor="var(--ocean)" stopOpacity={0.55} />
+          <stop offset="55%" stopColor="var(--ocean-deep)" stopOpacity={1} />
+          <stop offset="100%" stopColor="var(--background)" stopOpacity={1} />
+        </radialGradient>
+        <linearGradient id="landGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="var(--crust)" />
+          <stop offset="100%" stopColor="var(--land)" />
+        </linearGradient>
+        <radialGradient id="vignette" cx="50%" cy="50%" r="72%">
+          <stop offset="60%" stopColor="var(--background)" stopOpacity={0} />
+          <stop offset="100%" stopColor="var(--background)" stopOpacity={0.85} />
+        </radialGradient>
+        <filter id="landRelief" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="1.2" stdDeviation="1.4" floodColor="#000" floodOpacity="0.6" />
+        </filter>
+        <filter id="markerGlow" x="-300%" y="-300%" width="700%" height="700%">
+          <feGaussianBlur stdDeviation="3" result="b" />
+          <feMerge>
+            <feMergeNode in="b" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
+      <rect width={W} height={H} fill="url(#oceanGrad)" />
+      <path d={graticule} fill="none" stroke="var(--ocean)" strokeWidth={0.35} opacity={0.28} />
+
+      <g filter="url(#landRelief)">
         {paths.map(({ d, i }) => (
           <path
             key={i}
             d={d}
-            fill="var(--land)"
-            stroke="var(--background)"
+            fill="url(#landGrad)"
+            stroke="var(--primary)"
+            strokeOpacity={0.25}
             strokeWidth={0.4}
-            className="transition-[fill] duration-200 hover:fill-[var(--crust)]"
+            className="transition-[fill-opacity] duration-200 hover:fill-[var(--crust)]"
           />
         ))}
       </g>
+
+      {/* atmospheric sheen */}
+      <rect width={W} height={H} fill="url(#vignette)" pointerEvents="none" />
 
       {o && t && (
         <line
@@ -81,11 +112,12 @@ export default function WorldMap({
           strokeWidth={1}
           strokeDasharray="4 4"
           opacity={0.6}
+          filter="url(#markerGlow)"
         />
       )}
 
       {o && (
-        <g transform={`translate(${o[0]},${o[1]})`}>
+        <g transform={`translate(${o[0]},${o[1]})`} filter="url(#markerGlow)">
           <circle r={5} fill="none" stroke="var(--primary)" strokeWidth={1.5} opacity={0.8}>
             <animate attributeName="r" values="4;14" dur="1.8s" repeatCount="indefinite" />
             <animate attributeName="opacity" values="0.9;0" dur="1.8s" repeatCount="indefinite" />
@@ -95,7 +127,7 @@ export default function WorldMap({
       )}
 
       {t && (
-        <g transform={`translate(${t[0]},${t[1]})`}>
+        <g transform={`translate(${t[0]},${t[1]})`} filter="url(#markerGlow)">
           <circle r={4} fill="var(--accent)" />
           <circle r={8} fill="none" stroke="var(--accent)" strokeWidth={1} opacity={0.7} />
         </g>
