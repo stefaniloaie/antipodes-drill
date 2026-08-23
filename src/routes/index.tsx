@@ -4,6 +4,8 @@ import WorldMap from "@/components/WorldMap";
 import Globe from "@/components/Globe";
 import DrillDescent from "@/components/DrillDescent";
 import { antipode, describe, formatCoord, type Point, type Verdict } from "@/lib/geo";
+import heroImage from "@/assets/earth-core-hero.jpg";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -64,10 +66,18 @@ function Index() {
       {drilling && <DrillDescent onDone={finish} />}
 
       <section className="relative overflow-hidden border-b border-border">
+        <img
+          src={heroImage}
+          alt="Cinematic cross-section of Earth showing crust, mantle and a glowing molten inner core with a drill shaft punching through"
+          width={1920}
+          height={1088}
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover object-top opacity-60"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/30" />
         <div className="absolute inset-0 grain opacity-40" />
         <div className="relative mx-auto max-w-6xl px-6 pb-10 pt-16 sm:pt-24">
           <p className="mono-label text-primary">12 742 km · straight down · no detours</p>
-          <h1 className="mt-4 max-w-3xl text-5xl leading-[0.95] sm:text-7xl">
+          <h1 className="mt-4 max-w-3xl text-5xl leading-[0.95] drop-shadow-[0_2px_30px_rgba(0,0,0,0.6)] sm:text-7xl">
             Dig a hole to the
             <span className="block text-primary">other side of Earth.</span>
           </h1>
@@ -78,6 +88,7 @@ function Index() {
           </p>
         </div>
       </section>
+
 
       <section className="mx-auto grid max-w-6xl gap-10 px-6 py-12 lg:grid-cols-[1.4fr_1fr]">
         <div>
