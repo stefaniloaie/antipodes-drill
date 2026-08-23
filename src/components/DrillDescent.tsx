@@ -5,7 +5,7 @@ const DURATION = 7000;
 
 function layerAt(depthKm: number) {
   const d = depthKm > EARTH_RADIUS_KM ? THROUGH_KM - depthKm : depthKm;
-  return LAYERS.find((l) => d <= l.depth) ?? LAYERS[LAYERS.length - 1];
+  return LAYERS.find((l) => d <= l.depth) ?? LAYERS[LAYERS.length - 1]!;
 }
 
 export default function DrillDescent({ onDone }: { onDone: () => void }) {
