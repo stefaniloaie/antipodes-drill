@@ -135,21 +135,46 @@
   background-size: 4px 4px;
 }
 
+@utility strata {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    color-mix(in oklab, black 22%, transparent) 0px,
+    color-mix(in oklab, black 22%, transparent) 3px,
+    transparent 3px,
+    transparent 26px,
+    color-mix(in oklab, white 8%, transparent) 26px,
+    color-mix(in oklab, white 8%, transparent) 28px,
+    transparent 28px,
+    transparent 64px
+  );
+}
+
+@utility streaks {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    color-mix(in oklab, white 14%, transparent) 0px,
+    transparent 2px,
+    transparent 90px
+  );
+  filter: blur(1.5px);
+}
+
 @keyframes drill-shake {
   0%,
   100% {
     transform: translate3d(0, 0, 0);
   }
   25% {
-    transform: translate3d(-1.5px, 1px, 0);
+    transform: translate3d(calc(-1.5px * var(--shake, 1)), calc(1px * var(--shake, 1)), 0);
   }
   50% {
-    transform: translate3d(1.5px, -1px, 0);
+    transform: translate3d(calc(1.5px * var(--shake, 1)), calc(-1px * var(--shake, 1)), 0);
   }
   75% {
-    transform: translate3d(-1px, -1.5px, 0);
+    transform: translate3d(calc(-1px * var(--shake, 1)), calc(-1.5px * var(--shake, 1)), 0);
   }
 }
+
 
 @keyframes ember-rise {
   0% {

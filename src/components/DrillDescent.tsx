@@ -35,17 +35,37 @@ export default function DrillDescent({ onDone }: { onDone: () => void }) {
   const temp = tempAtDepth(depth);
   const heat = Math.min(1, temp / 5400);
 
+  const speed = Math.sin(Math.PI * p);
+  const shake = 0.5 + speed * 1.6;
+
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-background">
-      {/* Travelling cross-section: two mirrored earth gradients scrolling upward */}
+    <div className="fixed inset-0 z-50 overflow-hidden bg-background animate-fade-in">
       <div
-        className="absolute inset-x-0 h-[400vh] earth-gradient will-change-transform"
-        style={{ top: 0, transform: `translateY(${-p * 200}vh)` }}
-      />
-      <div
-        className="absolute inset-x-0 h-[400vh] earth-gradient will-change-transform"
-        style={{ top: 0, transform: `translateY(${-p * 200}vh) scaleY(-1)`, marginTop: "400vh" }}
-      />
+        className="absolute inset-0"
+        style={{ transform: `scale(${1.04 + speed * 0.06})`, transformOrigin: "50% 48%" }}
+      >
+        {/* Travelling cross-section: two mirrored earth gradients scrolling upward */}
+        <div
+          className="absolute inset-x-0 h-[400vh] earth-gradient will-change-transform"
+          style={{ top: 0, transform: `translateY(${-p * 200}vh)` }}
+        />
+        <div
+          className="absolute inset-x-0 h-[400vh] earth-gradient will-change-transform"
+          style={{ top: 0, transform: `translateY(${-p * 200}vh) scaleY(-1)`, marginTop: "400vh" }}
+        />
+
+        {/* strata bands scrolling past for parallax depth */}
+        <div
+          className="strata absolute inset-x-0 h-[800vh] opacity-40 mix-blend-overlay will-change-transform"
+          style={{ top: 0, transform: `translateY(${-p * 420}vh)` }}
+        />
+
+        {/* motion streaks */}
+        <div
+          className="streaks absolute inset-0 will-change-transform"
+          style={{ opacity: 0.15 + speed * 0.45 }}
+        />
+      </div>
 
       <div className="absolute inset-0 grain opacity-30" />
       <div
@@ -55,17 +75,28 @@ export default function DrillDescent({ onDone }: { onDone: () => void }) {
         }}
       />
 
+      {/* cinematic vignette + chromatic edge */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 50%, transparent 35%, color-mix(in oklab, black 78%, transparent) 100%)",
+        }}
+      />
+
       {/* embers */}
       <div className="pointer-events-none absolute inset-0">
-        {Array.from({ length: 18 }).map((_, i) => (
+        {Array.from({ length: 28 }).map((_, i) => (
           <span
             key={i}
-            className="absolute block size-1 rounded-full bg-inner-core"
+            className="absolute block rounded-full bg-inner-core blur-[1px]"
             style={{
+              width: `${2 + (i % 3)}px`,
+              height: `${2 + (i % 3)}px`,
               left: `${(i * 37) % 100}%`,
               top: `${50 + ((i * 17) % 45)}%`,
               opacity: heat,
-              animation: `ember-rise ${1.2 + (i % 5) * 0.35}s linear ${i * 0.17}s infinite`,
+              animation: `ember-rise ${1.2 + (i % 5) * 0.35}s linear ${i * 0.11}s infinite`,
             }}
           />
         ))}
@@ -74,15 +105,30 @@ export default function DrillDescent({ onDone }: { onDone: () => void }) {
       {/* Drill head */}
       <div
         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-        style={{ animation: "drill-shake 0.12s linear infinite" }}
+        style={{ animation: `drill-shake 0.12s linear infinite`, ["--shake" as string]: shake }}
       >
-        <svg width="64" height="112" viewBox="0 0 64 112" aria-hidden="true">
+        <div
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
+          style={{
+            width: 260,
+            height: 260,
+            background:
+              "radial-gradient(circle, color-mix(in oklab, var(--inner-core) 45%, transparent), transparent 65%)",
+            opacity: 0.4 + heat * 0.6,
+          }}
+        />
+        <svg width="64" height="112" viewBox="0 0 64 112" aria-hidden="true" className="relative">
           <rect x="22" y="0" width="20" height="52" fill="var(--secondary)" />
           <rect x="18" y="46" width="28" height="12" fill="var(--muted-foreground)" />
           <path d="M18 58 L46 58 L32 108 Z" fill="var(--foreground)" />
           <path d="M32 58 L46 58 L32 108 Z" fill="var(--muted-foreground)" opacity="0.6" />
         </svg>
       </div>
+
+      {/* letterbox bars */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[7vh] bg-[oklch(0.06_0_0)]" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[7vh] bg-[oklch(0.06_0_0)]" />
+
 
       {/* HUD */}
       <div className="absolute inset-x-0 top-0 p-6 sm:p-10">
