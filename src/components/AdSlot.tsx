@@ -1,12 +1,12 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Google AdSense publisher ID, e.g. "ca-pub-1234567890123456".
- * Set VITE_ADSENSE_CLIENT in your env to activate real ads.
- * Until then, slots render as themed reserved placeholders.
+ * Google AdSense publisher ID.
+ * Override with VITE_ADSENSE_CLIENT in your env if you ever need to switch accounts.
  */
 export const ADSENSE_CLIENT: string =
-  (import.meta.env["VITE_ADSENSE_CLIENT"] as string | undefined) ?? "";
+  (import.meta.env["VITE_ADSENSE_CLIENT"] as string | undefined) ??
+  "ca-pub-6603115789312953";
 
 let scriptInjected = false;
 
