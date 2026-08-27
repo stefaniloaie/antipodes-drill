@@ -45,6 +45,7 @@ function Index() {
   const [originName, setOriginName] = useState<string>("");
   const [drilling, setDrilling] = useState(false);
   const [label, setLabel] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   const drill = useCallback((p: Point, name?: string) => {
     const t = antipode(p);
