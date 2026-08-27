@@ -157,7 +157,25 @@ function Index() {
                     ? "Rare hit — you came out on dry land. Only a small fraction of Earth's surface manages that."
                     : "Splash. Like ~90% of land points, your tunnel opens into open water, thousands of kilometres from anyone."}
                 </p>
+
+                <button
+                  onClick={() => {
+                    const text = `I drilled from ${label ?? originName} and surfaced at ${verdict.place} (${formatCoord(target)})`;
+                    navigator.clipboard?.writeText(text);
+                    setCopied(true);
+                    window.setTimeout(() => setCopied(false), 1800);
+                    trackEvent("share_antipode_result", {
+                      method: "copy_link",
+                      emerged_on: verdict.isLand ? "land" : "ocean",
+                      place: verdict.place,
+                    });
+                  }}
+                  className="mt-5 rounded-full border border-border bg-background px-4 py-1.5 font-mono text-xs text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                >
+                  {copied ? "Copied" : "Copy result"}
+                </button>
               </div>
+
 
               <div className="flex flex-col items-center rounded-lg border border-border bg-card p-6 shadow-sm">
                 <p className="mono-label mb-3 self-start text-muted-foreground">
