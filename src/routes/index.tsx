@@ -5,6 +5,7 @@ import Globe from "@/components/Globe";
 import DrillDescent from "@/components/DrillDescent";
 import { antipode, describe, formatCoord, type Point, type Verdict } from "@/lib/geo";
 import AdSlot from "@/components/AdSlot";
+import { trackEvent } from "@/lib/analytics";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -44,9 +45,22 @@ function Index() {
   const [originName, setOriginName] = useState<string>("");
   const [drilling, setDrilling] = useState(false);
   const [label, setLabel] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   const drill = useCallback((p: Point, name?: string) => {
     const t = antipode(p);
+    trackEvent("select_location", {
+      method: name ? "preset" : "map_click",
+      location_name: name ?? describe(p).place,
+      origin_lat: Number(p.lat.toFixed(3)),
+      origin_lng: Number(p.lng.toFixed(3)),
+    });
+    trackEvent("start_drill", {
+      origin_lat: Number(p.lat.toFixed(3)),
+      origin_lng: Number(p.lng.toFixed(3)),
+      target_lat: Number(t.lat.toFixed(3)),
+      target_lng: Number(t.lng.toFixed(3)),
+    });
     setOrigin(p);
     setTarget(t);
     setVerdict(null);
@@ -57,7 +71,15 @@ function Index() {
 
   const finish = useCallback(() => {
     setDrilling(false);
-    if (target) setVerdict(describe(target));
+    if (!target) return;
+    const v = describe(target);
+    setVerdict(v);
+    trackEvent("drill_complete", {
+      emerged_on: v.isLand ? "land" : "ocean",
+      place: v.place,
+      target_lat: Number(target.lat.toFixed(3)),
+      target_lng: Number(target.lng.toFixed(3)),
+    });
   }, [target]);
 
   return (
@@ -136,7 +158,25 @@ function Index() {
                     ? "Rare hit — you came out on dry land. Only a small fraction of Earth's surface manages that."
                     : "Splash. Like ~90% of land points, your tunnel opens into open water, thousands of kilometres from anyone."}
                 </p>
+
+                <button
+                  onClick={() => {
+                    const text = `I drilled from ${label ?? originName} and surfaced at ${verdict.place} (${formatCoord(target)})`;
+                    navigator.clipboard?.writeText(text);
+                    setCopied(true);
+                    window.setTimeout(() => setCopied(false), 1800);
+                    trackEvent("share_antipode_result", {
+                      method: "copy_link",
+                      emerged_on: verdict.isLand ? "land" : "ocean",
+                      place: verdict.place,
+                    });
+                  }}
+                  className="mt-5 rounded-full border border-border bg-background px-4 py-1.5 font-mono text-xs text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                >
+                  {copied ? "Copied" : "Copy result"}
+                </button>
               </div>
+
 
               <div className="flex flex-col items-center rounded-lg border border-border bg-card p-6 shadow-sm">
                 <p className="mono-label mb-3 self-start text-muted-foreground">
