@@ -1,7 +1,7 @@
 /**
  * Google Analytics 4 (gtag.js) integration.
  *
- * The measurement ID is supplied via the VITE_GA_MEASUREMENT_ID env var
+ * The measurement ID is supplied via the GA_MEASUREMENT_ID env var
  * (e.g. "G-XXXXXXXXXX"). When it is absent, every function here is a no-op,
  * so the app keeps working without analytics configured.
  */
@@ -14,7 +14,7 @@ declare global {
 }
 
 export const GA_MEASUREMENT_ID: string | undefined =
-  import.meta.env["VITE_GA_MEASUREMENT_ID"] || undefined;
+  import.meta.env["GA_MEASUREMENT_ID"] || undefined;
 
 let initialized = false;
 
