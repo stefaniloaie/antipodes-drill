@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useCallback, useEffect, useRef, useState } from "react";
-import AntipodeMap from "@/components/AntipodeMap";
+import { useCallback, useEffect, useRef, useState, lazy, Suspense } from "react";
+const AntipodeMap = lazy(() => import("@/components/AntipodeMap"));
 import DrillDescent from "@/components/DrillDescent";
 import { antipode, describe, formatCoord, type Point, type Verdict } from "@/lib/geo";
 import AdSlot from "@/components/AdSlot";
@@ -367,7 +367,9 @@ function Index() {
 
       {/* Main: full-width map */}
       <section className="mx-auto max-w-6xl px-6 py-8">
-        <AntipodeMap onDrill={drill} origin={origin} target={target} />
+        <Suspense fallback={<div className="flex items-center justify-center rounded-b-xl border border-border bg-muted/30" style={{height:"70vh"}}><div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent"/></div>}>
+          <AntipodeMap onDrill={drill} origin={origin} target={target} />
+        </Suspense>
       </section>
 
       {/* Result panel — shown after drill */}
