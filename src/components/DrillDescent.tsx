@@ -67,7 +67,7 @@ export default function DrillDescent({ onDone }: { onDone: () => void }) {
     };
     raf.current = requestAnimationFrame(step);
     return () => { if (raf.current) cancelAnimationFrame(raf.current); };
-  }, [phase, onDone]);
+  }, [onDone]);
 
   const depth = p * THROUGH_KM;
   const layerIdx = layerIdxAt(depth);
