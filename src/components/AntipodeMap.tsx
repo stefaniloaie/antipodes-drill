@@ -219,6 +219,11 @@ export default function AntipodeMap({
             100% { transform: scale(2.8); opacity: 0; }
           }
           .leaflet-container { background: #0d1117; }
+          /* Dark mode: invert OSM tiles so we get a dark map with readable labels */
+          .leaflet-tile-pane { filter: invert(100%) hue-rotate(180deg) brightness(90%) contrast(88%) saturate(70%); }
+          .leaflet-marker-pane,
+          .leaflet-popup-pane,
+          .leaflet-overlay-pane { filter: none; }
         `}</style>
 
         <MapContainer
@@ -231,10 +236,9 @@ export default function AntipodeMap({
           className="z-0"
         >
           <TileLayer
-            attribution='&copy; <a href="https://carto.com/">CartoDB</a>'
-            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-            subdomains="abcd"
-            maxZoom={20}
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+            maxZoom={19}
           />
 
           <ClickHandler onPick={(p) => { setFlyTarget(null); onDrill(p); }} />
