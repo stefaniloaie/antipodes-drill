@@ -4,6 +4,9 @@ import DrillDescent from "@/components/DrillDescent";
 import { antipode, type Point } from "@/lib/geo";
 
 // Lazy-load Leaflet maps — avoids SSR "window is not defined" crash
+const LazyPickMap = lazy(() =>
+  import("@/components/GameMap").then((m) => ({ default: m.PickMap }))
+);
 const LazyGuessMap = lazy(() =>
   import("@/components/GameMap").then((m) => ({ default: m.GuessMap }))
 );
@@ -169,40 +172,40 @@ function GamePage() {
   return (
     <main className="min-h-screen">
 
-      {/* Picking phase — user chooses their drill origin */}
+      {/* Picking phase — user clicks the map to set drill origin */}
       {phase === "picking" && (
-        <div className="flex min-h-screen flex-col items-center justify-center px-6 text-center">
-          <p className="mono-label text-primary">Antipode Guessing Game</p>
-          <h1 className="mt-4 text-4xl text-foreground sm:text-6xl" style={{ fontFamily: "var(--font-display)", letterSpacing: "-0.02em" }}>
-            Pick your<br /><span className="text-primary">drill site.</span>
-          </h1>
-          <p className="mx-auto mt-5 max-w-md text-base text-muted-foreground">
-            Choose a city to drill from. The drill will punch through Earth's core — then you guess where it comes out on the other side.
-          </p>
-
-          {/* City grid */}
-          <div className="mt-10 flex flex-wrap justify-center gap-2">
-            {GAME_CITIES.map((c) => (
-              <button
-                key={c.name}
-                onClick={() => { setOrigin(c); setGuess(null); setPhase("drilling"); }}
-                className="rounded-full border border-border bg-card px-4 py-2 font-mono text-sm text-muted-foreground transition-colors hover:border-primary hover:text-primary"
-              >
-                {c.name}
-              </button>
-            ))}
+        <div className="flex min-h-screen flex-col">
+          <div className="border-b border-border bg-card px-6 py-4">
+            <div className="mx-auto flex max-w-6xl items-center justify-between gap-4">
+              <div>
+                <p className="mono-label text-primary">Antipode Guessing Game</p>
+                <h1 className="mt-1 text-2xl text-foreground" style={{ fontFamily: "var(--font-display)" }}>
+                  Click anywhere to set your drill site
+                </h1>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Pick a location — the drill will punch through Earth's core and you guess where it comes out.
+                </p>
+              </div>
+              <div className="flex shrink-0 items-center gap-2">
+                <button
+                  onClick={() => { setOrigin(pickRandomCity()); setGuess(null); setPhase("drilling"); }}
+                  className="rounded-full border border-border bg-background px-4 py-2 font-mono text-xs text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                >
+                  🎲 Random
+                </button>
+                <Link to="/" search={{}} className="rounded-full border border-border bg-background px-4 py-2 font-mono text-xs text-muted-foreground transition-colors hover:border-primary hover:text-primary">
+                  ← Back
+                </Link>
+              </div>
+            </div>
           </div>
-
-          <button
-            onClick={() => { setOrigin(pickRandomCity()); setGuess(null); setPhase("drilling"); }}
-            className="mt-8 rounded-full border border-primary bg-primary px-8 py-3 font-mono text-sm text-primary-foreground transition-all hover:opacity-90"
-          >
-            🎲 Random city
-          </button>
-
-          <Link to="/" search={{}} className="mt-4 font-mono text-xs text-muted-foreground hover:text-primary">
-            ← Back to drill
-          </Link>
+          <Suspense fallback={MapFallback}>
+            <LazyPickMap onPick={(p) => {
+              setOrigin({ name: `${p.lat.toFixed(2)}°, ${p.lng.toFixed(2)}°`, lat: p.lat, lng: p.lng });
+              setGuess(null);
+              setPhase("drilling");
+            }} />
+          </Suspense>
         </div>
       )}
 

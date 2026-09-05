@@ -63,6 +63,31 @@ function lineSegments(a: Point, b: Point): [number, number][][] {
   return [[pa, pb]];
 }
 
+// ── Pick map (origin selection) ────────────────────────────────────────────────
+
+export function PickMap({ onPick }: { onPick: (p: Point) => void }) {
+  return (
+    <div className="relative flex-1" style={{ minHeight: "calc(100vh - 140px)" }}>
+      <style>{MAP_STYLES}</style>
+      <MapContainer center={[20, 0]} zoom={2} minZoom={2} maxZoom={18}
+        style={{ height: "100%", width: "100%", minHeight: "calc(100vh - 140px)" }}
+        worldCopyJump className="z-0 cursor-crosshair">
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+          maxZoom={19}
+        />
+        <ClickHandler onPick={onPick} />
+      </MapContainer>
+      <div className="pointer-events-none absolute inset-0 flex items-end justify-center pb-10" style={{ zIndex: 400 }}>
+        <div className="rounded-full border border-primary/30 bg-background/80 px-5 py-2 font-mono text-xs tracking-widest text-primary/70 backdrop-blur-sm uppercase">
+          Click anywhere to set your drill site
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Guess map ──────────────────────────────────────────────────────────────────
 
 export function GuessMap({ guess, onPick }: { guess: Point | null; onPick: (p: Point) => void }) {
