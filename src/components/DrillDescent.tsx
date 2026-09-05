@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { LAYERS, THROUGH_KM, EARTH_RADIUS_KM, tempAtDepth } from "@/lib/geo";
 
-const DURATION = 8500;
+const DURATION = 4000;
 
 const LAYER_CONFIG = [
   { color: "#a87b52", glow: "168,123,82",  label: "CRUST"       },
