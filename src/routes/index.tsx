@@ -11,17 +11,17 @@ const SITE_URL = "https://antipodes-drill.lovable.app/";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Antipodes Earth Drill — Where Do You Come Out If You Dig Through the Earth?" },
+      { title: "Antipodes Drill — Where Do You Come Out Digging Through Earth?" },
       {
         name: "description",
         content:
-          "Click anywhere on Earth and drill 12,742 km straight through crust, mantle and 5,400 °C core. Find your antipodal point instantly — spoiler: it's almost always ocean.",
+          "Click anywhere on Earth and drill 12,742 km straight through crust, mantle and 5,400 °C core. Find your antipodal point instantly — it's almost always ocean, not China.",
       },
-      { property: "og:title", content: "Antipodes Earth Drill — Dig Straight Through the Planet" },
+      { property: "og:title", content: "Antipodes Drill — Dig Straight Through Earth" },
       {
         property: "og:description",
         content:
-          "Drop a drill anywhere on the map and watch it punch through Earth's layers to your antipodal point. Interactive globe view included.",
+          "Drop a drill anywhere on the map and watch it punch through Earth's five layers to your antipodal point. Almost never China.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: SITE_URL },
@@ -89,6 +89,22 @@ export const Route = createFileRoute("/")({
               acceptedAnswer: {
                 "@type": "Answer",
                 text: "Earth's diameter is 12,742 km. A straight drill from surface to surface passes through the crust (~35 km), upper mantle (to 660 km), lower mantle (to 2,890 km), liquid outer core (to 5,150 km), and solid inner core at ~5,400 °C.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "Which countries have land-to-land antipodes?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Very few country pairs are land-to-land antipodal. The most notable: Spain and New Zealand, Argentina and China (roughly), and some Pacific island nations. Over 90% of all land is antipodal to ocean.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "What is the antipode of London?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "The antipode of London (51.5°N, 0.1°W) is approximately 51.5°S, 179.9°E — in the South Pacific Ocean, about 2,000 km east of New Zealand. Not China.",
               },
             },
           ],

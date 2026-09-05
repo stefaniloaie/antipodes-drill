@@ -78,20 +78,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Antipodes Earth Drill" },
+      { title: "Antipodes Earth Drill — Dig Through the Planet" },
       {
         name: "description",
-        content: "Drill straight through the Earth and see where you come out.",
+        content:
+          "Click anywhere on Earth and drill 12,742 km straight through crust, mantle and 5,400 °C core. Find your antipodal point instantly — it's almost always ocean.",
       },
-      { property: "og:title", content: "Antipodes Earth Drill" },
+      { property: "og:title", content: "Antipodes Earth Drill — Dig Through the Planet" },
       {
         property: "og:description",
-        content: "Drill straight through the Earth and see where you come out.",
+        content:
+          "Click any point on the map and watch your drill descend through Earth's layers. Where do you come out? Almost never China.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "google-adsense-account", content: "ca-pub-6603115789312953" },
-      { name: "google-site-verification", content: "G-DKG4BJJDRR" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
