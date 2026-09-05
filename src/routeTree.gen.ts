@@ -10,12 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DigToChinaRouteImport } from './routes/dig-to-china'
 import { Route as GameRouteImport } from './routes/game'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DigToChinaRoute = DigToChinaRouteImport.update({
+  id: '/dig-to-china',
+  path: '/dig-to-china',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GameRoute = GameRouteImport.update({
@@ -31,30 +37,34 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dig-to-china': typeof DigToChinaRoute
   '/game': typeof GameRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dig-to-china': typeof DigToChinaRoute
   '/game': typeof GameRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dig-to-china': typeof DigToChinaRoute
   '/game': typeof GameRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/game' | '/sitemap.xml'
+  fullPaths: '/' | '/dig-to-china' | '/game' | '/sitemap.xml'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/game' | '/sitemap.xml'
-  id: '__root__' | '/' | '/game' | '/sitemap.xml'
+  to: '/' | '/dig-to-china' | '/game' | '/sitemap.xml'
+  id: '__root__' | '/' | '/dig-to-china' | '/game' | '/sitemap.xml'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DigToChinaRoute: typeof DigToChinaRoute
   GameRoute: typeof GameRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
@@ -66,6 +76,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dig-to-china': {
+      id: '/dig-to-china'
+      path: '/dig-to-china'
+      fullPath: '/dig-to-china'
+      preLoaderRoute: typeof DigToChinaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/game': {
@@ -87,6 +104,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DigToChinaRoute: DigToChinaRoute,
   GameRoute: GameRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
