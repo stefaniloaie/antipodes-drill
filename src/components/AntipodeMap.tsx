@@ -99,6 +99,7 @@ export default function AntipodeMap({
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [flyTarget, setFlyTarget] = useState<Point | null>(null);
+  const [geoState, setGeoState] = useState<"idle" | "loading" | "denied">("idle");
 
   const searchPlace = useCallback((q: string) => {
     if (!q.trim()) { setResults([]); return; }
@@ -125,6 +126,23 @@ export default function AntipodeMap({
     setResults([]);
     setFlyTarget(p);
     onDrill(p, r.display_name.split(",")[0]);
+  };
+
+  const handleGeolocate = () => {
+    if (!navigator.geolocation) return;
+    setGeoState("loading");
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const p: Point = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        setGeoState("idle");
+        setFlyTarget(p);
+        onDrill(p, "My location");
+      },
+      () => {
+        setGeoState("denied");
+        window.setTimeout(() => setGeoState("idle"), 2000);
+      },
+    );
   };
 
   const pickPreset = (p: (typeof PRESETS)[0]) => {
@@ -217,6 +235,27 @@ export default function AntipodeMap({
             </div>
           )}
         </div>
+
+        {/* Geolocation button */}
+        <button
+          onClick={handleGeolocate}
+          disabled={geoState === "loading"}
+          className="flex items-center gap-1.5 rounded-lg border border-border bg-background px-3 py-2 font-mono text-xs text-muted-foreground transition-colors hover:border-primary hover:text-primary disabled:opacity-60"
+        >
+          {geoState === "loading" ? (
+            <>
+              <div className="h-3 w-3 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+              <span>Locating…</span>
+            </>
+          ) : geoState === "denied" ? (
+            <span className="text-destructive">Denied</span>
+          ) : (
+            <>
+              <span>📍</span>
+              <span>My location</span>
+            </>
+          )}
+        </button>
       </div>
 
       {/* Map */}

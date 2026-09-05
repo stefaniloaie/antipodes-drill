@@ -1,5 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useCallback, useState } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useCallback, useEffect, useRef, useState } from "react";
 import AntipodeMap from "@/components/AntipodeMap";
 import DrillDescent from "@/components/DrillDescent";
 import { antipode, describe, formatCoord, type Point, type Verdict } from "@/lib/geo";
@@ -9,6 +9,12 @@ import { trackEvent } from "@/lib/analytics";
 const SITE_URL = "https://antipodes-drill.lovable.app/";
 
 export const Route = createFileRoute("/")({
+  validateSearch: (search: Record<string, unknown>): { lat?: number; lng?: number } => {
+    const result: { lat?: number; lng?: number } = {};
+    if (search["lat"] !== undefined) result.lat = Number(search["lat"]);
+    if (search["lng"] !== undefined) result.lng = Number(search["lng"]);
+    return result;
+  },
   head: () => ({
     meta: [
       { title: "Antipodes Drill — Where Do You Come Out Digging Through Earth?" },
@@ -115,8 +121,141 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+// ── Data ──────────────────────────────────────────────────────────────────────
+
+const FAMOUS_PAIRS = [
+  {
+    cityA: "Madrid",
+    lat: 40.4168,
+    lng: -3.7038,
+    cityB: "Wellington, NZ",
+    fact: "One of the rare land-to-land antipodal pairs on Earth — Iberia and Aotearoa mirror each other.",
+  },
+  {
+    cityA: "Buenos Aires",
+    lat: -34.6037,
+    lng: -58.3816,
+    cityB: "Shanghai area, China",
+    fact: "Argentina's capital drills to East China — the only major Southern-Hemisphere-to-China pairing.",
+  },
+  {
+    cityA: "Auckland",
+    lat: -36.8509,
+    lng: 174.7645,
+    cityB: "Seville, Spain",
+    fact: "New Zealand and Spain are near-perfect antipodal mirrors — half a world apart, both temperate.",
+  },
+  {
+    cityA: "Taipei",
+    lat: 25.033,
+    lng: 121.5654,
+    cityB: "Paraguay",
+    fact: "Taiwan's capital emerges in landlocked South America, near the Paraguayan Chaco.",
+  },
+  {
+    cityA: "Perth",
+    lat: -31.9505,
+    lng: 115.8605,
+    cityB: "Bermuda area",
+    fact: "Western Australia's sunniest city punches through to the North Atlantic near Bermuda.",
+  },
+  {
+    cityA: "London",
+    lat: 51.5074,
+    lng: -0.1278,
+    cityB: "South Pacific (NZ waters)",
+    fact: "Big Ben digs to empty ocean ~2,000 km east of New Zealand. Definitely not China.",
+  },
+  {
+    cityA: "Tokyo",
+    lat: 35.6762,
+    lng: 139.6503,
+    cityB: "Uruguay coast",
+    fact: "Japan's capital surfaces just off the Atlantic coast of Uruguay — a stunning jump.",
+  },
+  {
+    cityA: "New York",
+    lat: 40.7128,
+    lng: -74.006,
+    cityB: "South Indian Ocean",
+    fact: "NYC digs to empty ocean south of Western Australia. China is nowhere near the antipode.",
+  },
+] as const;
+
+const RANDOM_CITIES = [
+  { label: "London", lat: 51.5074, lng: -0.1278 },
+  { label: "New York", lat: 40.7128, lng: -74.006 },
+  { label: "Tokyo", lat: 35.6762, lng: 139.6503 },
+  { label: "Sydney", lat: -33.8688, lng: 151.2093 },
+  { label: "Cairo", lat: 30.0444, lng: 31.2357 },
+  { label: "Mumbai", lat: 19.076, lng: 72.8777 },
+  { label: "São Paulo", lat: -23.5505, lng: -46.6333 },
+  { label: "Beijing", lat: 39.9042, lng: 116.4074 },
+  { label: "Moscow", lat: 55.7558, lng: 37.6176 },
+  { label: "Buenos Aires", lat: -34.6037, lng: -58.3816 },
+  { label: "Lagos", lat: 6.5244, lng: 3.3792 },
+  { label: "Johannesburg", lat: -26.2041, lng: 28.0473 },
+  { label: "Mexico City", lat: 19.4326, lng: -99.1332 },
+  { label: "Jakarta", lat: -6.2088, lng: 106.8456 },
+  { label: "Istanbul", lat: 41.0082, lng: 28.9784 },
+  { label: "Los Angeles", lat: 34.0522, lng: -118.2437 },
+  { label: "Nairobi", lat: -1.2921, lng: 36.8219 },
+  { label: "Seoul", lat: 37.5665, lng: 126.978 },
+  { label: "Madrid", lat: 40.4168, lng: -3.7038 },
+  { label: "Wellington", lat: -41.2865, lng: 174.7762 },
+];
+
+const COUNTRY_TABLE = [
+  { country: "Afghanistan", capital: "Kabul", lat: 34.5553, lng: 69.2075, antipodeLoc: "South Pacific Ocean" },
+  { country: "Argentina", capital: "Buenos Aires", lat: -34.6037, lng: -58.3816, antipodeLoc: "Shanghai area, China" },
+  { country: "Australia", capital: "Canberra", lat: -35.2809, lng: 149.13, antipodeLoc: "North Atlantic Ocean" },
+  { country: "Brazil", capital: "Brasília", lat: -15.7942, lng: -47.8822, antipodeLoc: "Philippine Sea" },
+  { country: "Canada", capital: "Ottawa", lat: 45.4215, lng: -75.6972, antipodeLoc: "South Indian Ocean" },
+  { country: "Chile", capital: "Santiago", lat: -33.4489, lng: -70.6693, antipodeLoc: "Yellow Sea (China coast)" },
+  { country: "China", capital: "Beijing", lat: 39.9042, lng: 116.4074, antipodeLoc: "South Atlantic Ocean (Argentina)" },
+  { country: "Colombia", capital: "Bogotá", lat: 4.711, lng: -74.0721, antipodeLoc: "Indian Ocean (off Indonesia)" },
+  { country: "Denmark", capital: "Copenhagen", lat: 55.6761, lng: 12.5683, antipodeLoc: "South Pacific Ocean" },
+  { country: "Egypt", capital: "Cairo", lat: 30.0444, lng: 31.2357, antipodeLoc: "South Pacific Ocean" },
+  { country: "France", capital: "Paris", lat: 48.8566, lng: 2.3522, antipodeLoc: "South Pacific Ocean (near NZ)" },
+  { country: "Germany", capital: "Berlin", lat: 52.52, lng: 13.405, antipodeLoc: "South Pacific Ocean" },
+  { country: "Greece", capital: "Athens", lat: 37.9838, lng: 23.7275, antipodeLoc: "South Pacific Ocean" },
+  { country: "India", capital: "New Delhi", lat: 28.6139, lng: 77.209, antipodeLoc: "South Pacific Ocean" },
+  { country: "Indonesia", capital: "Jakarta", lat: -6.2088, lng: 106.8456, antipodeLoc: "Pacific Ocean (near Ecuador)" },
+  { country: "Iran", capital: "Tehran", lat: 35.6892, lng: 51.389, antipodeLoc: "South Pacific Ocean" },
+  { country: "Italy", capital: "Rome", lat: 41.9028, lng: 12.4964, antipodeLoc: "South Pacific Ocean" },
+  { country: "Japan", capital: "Tokyo", lat: 35.6762, lng: 139.6503, antipodeLoc: "South Atlantic (Uruguay coast)" },
+  { country: "Kenya", capital: "Nairobi", lat: -1.2921, lng: 36.8219, antipodeLoc: "Pacific Ocean (north of Kiribati)" },
+  { country: "Mexico", capital: "Mexico City", lat: 19.4326, lng: -99.1332, antipodeLoc: "South Indian Ocean" },
+  { country: "Netherlands", capital: "Amsterdam", lat: 52.3676, lng: 4.9041, antipodeLoc: "South Pacific Ocean" },
+  { country: "New Zealand", capital: "Wellington", lat: -41.2865, lng: 174.7762, antipodeLoc: "Spain / Atlantic coast" },
+  { country: "Nigeria", capital: "Abuja", lat: 9.0579, lng: 7.4951, antipodeLoc: "South Pacific Ocean" },
+  { country: "Norway", capital: "Oslo", lat: 59.9139, lng: 10.7522, antipodeLoc: "South Pacific Ocean" },
+  { country: "Pakistan", capital: "Islamabad", lat: 33.6844, lng: 73.0479, antipodeLoc: "South Pacific Ocean" },
+  { country: "Peru", capital: "Lima", lat: -12.0464, lng: -77.0428, antipodeLoc: "South China Sea / Gulf of Thailand" },
+  { country: "Philippines", capital: "Manila", lat: 14.5995, lng: 120.9842, antipodeLoc: "Bolivia / Brazil border" },
+  { country: "Poland", capital: "Warsaw", lat: 52.2297, lng: 21.0122, antipodeLoc: "South Pacific Ocean" },
+  { country: "Portugal", capital: "Lisbon", lat: 38.7223, lng: -9.1393, antipodeLoc: "South Pacific Ocean (near NZ)" },
+  { country: "Russia", capital: "Moscow", lat: 55.7558, lng: 37.6176, antipodeLoc: "South Pacific Ocean" },
+  { country: "Saudi Arabia", capital: "Riyadh", lat: 24.6877, lng: 46.7219, antipodeLoc: "South Pacific Ocean" },
+  { country: "South Africa", capital: "Pretoria", lat: -25.7479, lng: 28.2293, antipodeLoc: "North Pacific Ocean (west of Hawaii)" },
+  { country: "South Korea", capital: "Seoul", lat: 37.5665, lng: 126.978, antipodeLoc: "South Atlantic Ocean (Argentina)" },
+  { country: "Spain", capital: "Madrid", lat: 40.4168, lng: -3.7038, antipodeLoc: "Wellington, New Zealand (land!)" },
+  { country: "Sweden", capital: "Stockholm", lat: 59.3293, lng: 18.0686, antipodeLoc: "South Pacific Ocean" },
+  { country: "Thailand", capital: "Bangkok", lat: 13.7563, lng: 100.5018, antipodeLoc: "Pacific coast of Peru" },
+  { country: "Turkey", capital: "Ankara", lat: 39.9334, lng: 32.8597, antipodeLoc: "South Pacific Ocean" },
+  { country: "Ukraine", capital: "Kyiv", lat: 50.4501, lng: 30.5234, antipodeLoc: "South Pacific Ocean" },
+  { country: "United Kingdom", capital: "London", lat: 51.5074, lng: -0.1278, antipodeLoc: "South Pacific Ocean (near NZ)" },
+  { country: "United States", capital: "Washington DC", lat: 38.9072, lng: -77.0369, antipodeLoc: "South Indian Ocean" },
+  { country: "Vietnam", capital: "Hanoi", lat: 21.0285, lng: 105.8542, antipodeLoc: "South Pacific Ocean" },
+];
+
+// ── Component ─────────────────────────────────────────────────────────────────
 
 function Index() {
+  const { lat: searchLat, lng: searchLng } = Route.useSearch();
+  const navigate = useNavigate({ from: "/" });
+  const didAutodrillRef = useRef(false);
+
   const [origin, setOrigin] = useState<Point | null>(null);
   const [target, setTarget] = useState<Point | null>(null);
   const [verdict, setVerdict] = useState<Verdict | null>(null);
@@ -125,27 +264,31 @@ function Index() {
   const [label, setLabel] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
-  const drill = useCallback((p: Point, name?: string) => {
-    const t = antipode(p);
-    trackEvent("select_location", {
-      method: name ? "preset" : "map_click",
-      location_name: name ?? describe(p).place,
-      origin_lat: Number(p.lat.toFixed(3)),
-      origin_lng: Number(p.lng.toFixed(3)),
-    });
-    trackEvent("start_drill", {
-      origin_lat: Number(p.lat.toFixed(3)),
-      origin_lng: Number(p.lng.toFixed(3)),
-      target_lat: Number(t.lat.toFixed(3)),
-      target_lng: Number(t.lng.toFixed(3)),
-    });
-    setOrigin(p);
-    setTarget(t);
-    setVerdict(null);
-    setLabel(name ?? null);
-    setOriginName(describe(p).place);
-    setDrilling(true);
-  }, []);
+  const drill = useCallback(
+    (p: Point, name?: string) => {
+      const t = antipode(p);
+      trackEvent("select_location", {
+        method: name ? "preset" : "map_click",
+        location_name: name ?? describe(p).place,
+        origin_lat: Number(p.lat.toFixed(3)),
+        origin_lng: Number(p.lng.toFixed(3)),
+      });
+      trackEvent("start_drill", {
+        origin_lat: Number(p.lat.toFixed(3)),
+        origin_lng: Number(p.lng.toFixed(3)),
+        target_lat: Number(t.lat.toFixed(3)),
+        target_lng: Number(t.lng.toFixed(3)),
+      });
+      setOrigin(p);
+      setTarget(t);
+      setVerdict(null);
+      setLabel(name ?? null);
+      setOriginName(describe(p).place);
+      setDrilling(true);
+      navigate({ search: { lat: p.lat, lng: p.lng }, replace: true });
+    },
+    [navigate],
+  );
 
   const finish = useCallback(() => {
     setDrilling(false);
@@ -159,6 +302,28 @@ function Index() {
       target_lng: Number(target.lng.toFixed(3)),
     });
   }, [target]);
+
+  // Auto-drill from URL params on first mount
+  useEffect(() => {
+    if (didAutodrillRef.current) return;
+    if (
+      searchLat !== undefined &&
+      searchLng !== undefined &&
+      !isNaN(searchLat) &&
+      !isNaN(searchLng)
+    ) {
+      didAutodrillRef.current = true;
+      drill({ lat: searchLat, lng: searchLng });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleRandom = () => {
+    const idx = Math.floor(Math.random() * RANDOM_CITIES.length);
+    const city = RANDOM_CITIES[idx];
+    if (!city) return;
+    drill({ lat: city.lat, lng: city.lng }, city.label);
+  };
 
   return (
     <main className="min-h-screen">
@@ -179,6 +344,12 @@ function Index() {
             You were told it comes out in China. It almost never does — click the map to find out
             where you'd actually surface.
           </p>
+          <button
+            onClick={handleRandom}
+            className="mt-5 inline-flex items-center gap-2 rounded-full border border-border bg-background px-5 py-2 font-mono text-sm text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+          >
+            🎲 Random
+          </button>
         </div>
       </section>
 
@@ -214,8 +385,7 @@ function Index() {
               </p>
               <button
                 onClick={() => {
-                  const text = `I drilled from ${label ?? originName} and surfaced at ${verdict.place} (${formatCoord(target)})`;
-                  navigator.clipboard?.writeText(text);
+                  navigator.clipboard?.writeText(window.location.href);
                   setCopied(true);
                   window.setTimeout(() => setCopied(false), 1800);
                   trackEvent("share_antipode_result", {
@@ -232,6 +402,33 @@ function Index() {
           </div>
         </section>
       )}
+
+      {/* Famous antipodal pairs */}
+      <section className="border-t border-border bg-card">
+        <div className="mx-auto max-w-6xl px-6 py-16">
+          <p className="mono-label text-primary">Explore</p>
+          <h2 className="mt-3 text-3xl text-foreground">Famous antipodal pairs</h2>
+          <p className="mt-3 max-w-2xl text-base text-muted-foreground">
+            Click any card to drill from that city and see where it surfaces.
+          </p>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {FAMOUS_PAIRS.map((pair) => (
+              <button
+                key={pair.cityA}
+                onClick={() => drill({ lat: pair.lat, lng: pair.lng }, pair.cityA)}
+                className="group rounded-xl border border-border bg-background p-4 text-left transition-all hover:border-primary hover:shadow-md"
+              >
+                <p className="font-mono text-xs text-primary uppercase tracking-wider">Drill from</p>
+                <p className="mt-1 text-base font-semibold text-foreground group-hover:text-primary">
+                  {pair.cityA}
+                </p>
+                <p className="mt-0.5 font-mono text-xs text-muted-foreground">→ {pair.cityB}</p>
+                <p className="mt-3 text-xs text-muted-foreground leading-relaxed">{pair.fact}</p>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* About / How it works — needed for AdSense content review */}
       <section className="border-t border-border bg-card">
@@ -325,6 +522,52 @@ function Index() {
                 <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{item.a}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Country antipode table */}
+      <section className="border-t border-border bg-card">
+        <div className="mx-auto max-w-6xl px-6 py-16">
+          <p className="mono-label text-primary">Reference</p>
+          <h2 className="mt-3 text-3xl text-foreground">Antipode of every country (capital city)</h2>
+          <p className="mt-3 max-w-2xl text-base text-muted-foreground">
+            Where each capital city emerges after drilling straight through the Earth. Click "Drill →" to explore.
+          </p>
+          <div
+            className="mt-8 overflow-hidden rounded-xl border border-border"
+            style={{ maxHeight: 400, overflowY: "auto" }}
+          >
+            <table className="w-full text-sm">
+              <thead className="sticky top-0 bg-card border-b border-border z-10">
+                <tr>
+                  <th className="px-4 py-3 text-left font-mono text-xs text-muted-foreground uppercase tracking-wider">Country</th>
+                  <th className="px-4 py-3 text-left font-mono text-xs text-muted-foreground uppercase tracking-wider">Capital</th>
+                  <th className="px-4 py-3 text-left font-mono text-xs text-muted-foreground uppercase tracking-wider">Antipode location</th>
+                  <th className="px-4 py-3 text-right font-mono text-xs text-muted-foreground uppercase tracking-wider"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {COUNTRY_TABLE.map((row, i) => (
+                  <tr
+                    key={row.country}
+                    className={i % 2 === 0 ? "bg-background" : "bg-card"}
+                  >
+                    <td className="px-4 py-3 font-medium text-foreground">{row.country}</td>
+                    <td className="px-4 py-3 text-muted-foreground">{row.capital}</td>
+                    <td className="px-4 py-3 text-muted-foreground">{row.antipodeLoc}</td>
+                    <td className="px-4 py-3 text-right">
+                      <button
+                        onClick={() => drill({ lat: row.lat, lng: row.lng }, row.capital)}
+                        className="rounded-full border border-border px-3 py-1 font-mono text-xs text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                      >
+                        Drill →
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
