@@ -17,45 +17,8 @@ function layerIdxAt(depthKm: number) {
   return i === -1 ? LAYERS.length - 1 : i;
 }
 
-// Countdown overlay
-function Countdown({ onDone }: { onDone: () => void }) {
-  const [n, setN] = useState(3);
-  useEffect(() => {
-    if (n === 0) { setTimeout(onDone, 300); return; }
-    const t = setTimeout(() => setN((v) => v - 1), 700);
-    return () => clearTimeout(t);
-  }, [n, onDone]);
-  return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center" style={{ background: "#050608" }}>
-      <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.7rem", letterSpacing: "0.35em", color: "rgba(255,255,255,0.3)", textTransform: "uppercase", marginBottom: 24 }}>
-        INITIATING DRILL SEQUENCE
-      </p>
-      <div
-        key={n}
-        style={{
-          fontFamily: "var(--font-display)",
-          fontSize: "clamp(6rem,20vw,14rem)",
-          lineHeight: 1,
-          color: "#fff",
-          animation: "countdown-pop 0.65s cubic-bezier(0.22,1,0.36,1) forwards",
-        }}
-      >
-        {n === 0 ? "GO" : n}
-      </div>
-      <style>{`
-        @keyframes countdown-pop {
-          0%   { transform: scale(1.8); opacity: 0; }
-          20%  { opacity: 1; }
-          80%  { transform: scale(1);   opacity: 1; }
-          100% { transform: scale(0.7); opacity: 0; }
-        }
-      `}</style>
-    </div>
-  );
-}
 
 export default function DrillDescent({ onDone }: { onDone: () => void }) {
-  const [phase, setPhase] = useState<"countdown" | "drilling">("countdown");
   const [p, setP] = useState(0);
   const [flash, setFlash] = useState<string | null>(null);
   const [coreReached, setCoreReached] = useState(false);
@@ -66,10 +29,7 @@ export default function DrillDescent({ onDone }: { onDone: () => void }) {
   const raf = useRef<number | null>(null);
   const done = useRef(false);
 
-  const startDrilling = () => setPhase("drilling");
-
   useEffect(() => {
-    if (phase !== "drilling") return;
     const t0 = performance.now();
     const step = (t: number) => {
       const k = Math.min(1, (t - t0) / DURATION);
@@ -108,8 +68,6 @@ export default function DrillDescent({ onDone }: { onDone: () => void }) {
     raf.current = requestAnimationFrame(step);
     return () => { if (raf.current) cancelAnimationFrame(raf.current); };
   }, [phase, onDone]);
-
-  if (phase === "countdown") return <Countdown onDone={startDrilling} />;
 
   const depth = p * THROUGH_KM;
   const layerIdx = layerIdxAt(depth);

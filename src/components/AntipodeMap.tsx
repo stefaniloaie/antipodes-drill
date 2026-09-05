@@ -231,12 +231,7 @@ export default function AntipodeMap({
             0% { transform: scale(1); opacity: 0.5; }
             100% { transform: scale(2.8); opacity: 0; }
           }
-          .leaflet-container { background: #0d1117; }
-          /* Dark mode: invert OSM tiles so we get a dark map with readable labels */
-          .leaflet-tile-pane { filter: invert(100%) hue-rotate(180deg) brightness(115%) contrast(75%) saturate(85%); }
-          .leaflet-marker-pane,
-          .leaflet-popup-pane,
-          .leaflet-overlay-pane { filter: none; }
+          .leaflet-container { background: #e8e4d9; }
         `}</style>
 
         <MapContainer
