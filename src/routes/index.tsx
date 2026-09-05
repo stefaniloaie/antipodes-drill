@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import AntipodeMap from "@/components/AntipodeMap";
 import DrillDescent from "@/components/DrillDescent";
@@ -344,12 +344,20 @@ function Index() {
             You were told it comes out in China. It almost never does — click the map to find out
             where you'd actually surface.
           </p>
-          <button
-            onClick={handleRandom}
-            className="mt-5 inline-flex items-center gap-2 rounded-full border border-border bg-background px-5 py-2 font-mono text-sm text-muted-foreground transition-colors hover:border-primary hover:text-primary"
-          >
-            🎲 Random
-          </button>
+          <div className="mt-5 flex flex-wrap items-center gap-3">
+            <button
+              onClick={handleRandom}
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-5 py-2 font-mono text-sm text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+            >
+              🎲 Random
+            </button>
+            <Link
+              to="/game"
+              className="inline-flex items-center gap-2 rounded-full border border-primary bg-primary px-5 py-2 font-mono text-sm text-primary-foreground transition-all hover:opacity-90"
+            >
+              🎮 Play the guessing game
+            </Link>
+          </div>
         </div>
       </section>
 
