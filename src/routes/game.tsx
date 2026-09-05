@@ -148,6 +148,8 @@ type Phase = "drilling" | "guessing" | "result";
 
 // ── Route ─────────────────────────────────────────────────────────────────────
 
+const GAME_URL = "https://antipodes-drill.lovable.app/game";
+
 export const Route = createFileRoute("/game")({
   head: () => ({
     meta: [
@@ -155,7 +157,48 @@ export const Route = createFileRoute("/game")({
       {
         name: "description",
         content:
-          "A mystery city drills through Earth — can you guess where it comes out on the other side? Place your pin, confirm your guess, and see how close you got.",
+          "A mystery city drills through Earth — can you guess the antipodal point on the other side? Place your pin on the map, score points for accuracy, and earn a title: Earth Whisperer, Master Navigator, or Flat Earther.",
+      },
+      { property: "og:title", content: "Antipode Guessing Game — Where Does the Drill Come Out?" },
+      {
+        property: "og:description",
+        content:
+          "A mystery city drills straight through Earth. Guess the antipodal exit point on an interactive map. Score 100% to become an Earth Whisperer.",
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: GAME_URL },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Antipode Guessing Game" },
+      {
+        name: "twitter:description",
+        content: "Guess where a drill through the Earth comes out. Place your pin. Earn a title.",
+      },
+      { name: "robots", content: "index, follow" },
+      {
+        name: "keywords",
+        content:
+          "antipode game, earth drill game, geography guessing game, antipodal point quiz, dig through earth game, geoguessr alternative, world geography game",
+      },
+    ],
+    links: [{ rel: "canonical", href: GAME_URL }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Game",
+          name: "Antipode Guessing Game",
+          url: GAME_URL,
+          description:
+            "An interactive geography game where a random world city drills through the Earth and players must guess the antipodal exit point on an interactive map. Players earn titles based on accuracy: Earth Whisperer, Master Navigator, Seasoned Explorer, Frequent Flyer, Lost at Sea, or Flat Earther.",
+          genre: "Geography / Educational",
+          playMode: "SinglePlayer",
+          applicationCategory: "Game",
+          operatingSystem: "Web",
+          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+          educationalUse: "Geography",
+          typicalAgeRange: "10-",
+        }),
       },
     ],
   }),

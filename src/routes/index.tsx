@@ -33,7 +33,7 @@ export const Route = createFileRoute("/")({
       { property: "og:url", content: SITE_URL },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "index, follow" },
-      { name: "keywords", content: "antipode calculator, dig through earth, antipodal point, what is on the other side of earth, drill through earth, earth antipodes map" },
+      { name: "keywords", content: "antipode calculator, dig through earth, antipodal point, what is on the other side of earth, drill through earth, earth antipodes map, antipode guessing game, geography game" },
     ],
     links: [
       { rel: "canonical", href: SITE_URL },
