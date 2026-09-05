@@ -14,7 +14,9 @@ declare global {
 }
 
 export const GA_MEASUREMENT_ID: string | undefined =
-  import.meta.env["GA_MEASUREMENT_ID"] || undefined;
+  (import.meta.env["VITE_GA_MEASUREMENT_ID"] as string | undefined) ||
+  (import.meta.env["GA_MEASUREMENT_ID"] as string | undefined) ||
+  "G-DKG4BJJDRR";
 
 let initialized = false;
 
