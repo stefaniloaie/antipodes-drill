@@ -233,6 +233,54 @@ function Index() {
         </section>
       )}
 
+      {/* About / How it works — needed for AdSense content review */}
+      <section className="border-t border-border bg-card">
+        <div className="mx-auto max-w-6xl px-6 py-16">
+          <div className="grid gap-12 lg:grid-cols-2">
+            <div>
+              <p className="mono-label text-primary">About</p>
+              <h2 className="mt-3 text-3xl text-foreground">What is an antipodal point?</h2>
+              <p className="mt-5 text-base text-muted-foreground leading-relaxed">
+                An <strong className="text-foreground">antipodal point</strong> is the location on Earth's surface
+                that is diametrically opposite to a given point — the place you'd emerge if you could drill a
+                perfectly straight tunnel through the center of the Earth. The word comes from the Greek
+                <em> antipodes</em>, meaning "with feet opposite."
+              </p>
+              <p className="mt-4 text-base text-muted-foreground leading-relaxed">
+                Calculating your antipode is straightforward geometry: negate your latitude and shift your
+                longitude by 180°. If you stand at 40°N, 74°W (New York City), your antipode is at
+                40°S, 106°E — deep in the southern Indian Ocean, roughly 1,500 km south of Western Australia.
+              </p>
+              <p className="mt-4 text-base text-muted-foreground leading-relaxed">
+                The surprising fact: <strong className="text-foreground">over 71% of Earth's surface is ocean</strong>,
+                and the distribution of land vs ocean is highly asymmetric between hemispheres. The northern
+                hemisphere holds most of the world's landmass, while the southern hemisphere is predominantly
+                water. This means the antipode of almost any city you can name drops into open ocean.
+              </p>
+            </div>
+            <div>
+              <p className="mono-label text-primary">The China myth</p>
+              <h2 className="mt-3 text-3xl text-foreground">Why digging doesn't reach China</h2>
+              <p className="mt-5 text-base text-muted-foreground leading-relaxed">
+                The "dig to China" idiom is deeply embedded in English-speaking culture, but it's
+                geographically impossible for anyone in the United States or Europe. China sits at
+                roughly 20–50°N latitude, in the same hemisphere as both countries.
+              </p>
+              <p className="mt-4 text-base text-muted-foreground leading-relaxed">
+                The antipode of New York (40.7°N, 74°W) is the Indian Ocean at 40.7°S, 106°E. The
+                antipode of London (51.5°N, 0.1°W) is the South Pacific Ocean at 51.5°S, 179.9°E —
+                about 2,000 km east of New Zealand. Neither is anywhere near China.
+              </p>
+              <p className="mt-4 text-base text-muted-foreground leading-relaxed">
+                The only people for whom digging "toward China" makes geographic sense are those
+                living in Argentina or Chile — whose antipodes do land in parts of East Asia.
+                For everyone else, it's ocean all the way down.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Earth layers explainer */}
       <section className="border-t border-border bg-card">
         <div className="mx-auto max-w-6xl px-6 py-16">
