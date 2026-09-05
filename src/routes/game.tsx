@@ -77,7 +77,7 @@ function scoreTier(pct: number): Tier {
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
-type Phase = "drilling" | "guessing" | "result";
+type Phase = "picking" | "drilling" | "guessing" | "result";
 
 // ── Route ──────────────────────────────────────────────────────────────────────
 
@@ -142,7 +142,7 @@ const MapFallback = (
 // ── Component ──────────────────────────────────────────────────────────────────
 
 function GamePage() {
-  const [phase, setPhase] = useState<Phase>("drilling");
+  const [phase, setPhase] = useState<Phase>("picking");
   const [origin, setOrigin] = useState(() => pickRandomCity());
   const [guess, setGuess] = useState<Point | null>(null);
 
@@ -163,11 +163,49 @@ function GamePage() {
   const handlePlayAgain = () => {
     setOrigin(pickRandomCity());
     setGuess(null);
-    setPhase("drilling");
+    setPhase("picking");
   };
 
   return (
     <main className="min-h-screen">
+
+      {/* Picking phase — user chooses their drill origin */}
+      {phase === "picking" && (
+        <div className="flex min-h-screen flex-col items-center justify-center px-6 text-center">
+          <p className="mono-label text-primary">Antipode Guessing Game</p>
+          <h1 className="mt-4 text-4xl text-foreground sm:text-6xl" style={{ fontFamily: "var(--font-display)", letterSpacing: "-0.02em" }}>
+            Pick your<br /><span className="text-primary">drill site.</span>
+          </h1>
+          <p className="mx-auto mt-5 max-w-md text-base text-muted-foreground">
+            Choose a city to drill from. The drill will punch through Earth's core — then you guess where it comes out on the other side.
+          </p>
+
+          {/* City grid */}
+          <div className="mt-10 flex flex-wrap justify-center gap-2">
+            {GAME_CITIES.map((c) => (
+              <button
+                key={c.name}
+                onClick={() => { setOrigin(c); setGuess(null); setPhase("drilling"); }}
+                className="rounded-full border border-border bg-card px-4 py-2 font-mono text-sm text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+              >
+                {c.name}
+              </button>
+            ))}
+          </div>
+
+          <button
+            onClick={() => { setOrigin(pickRandomCity()); setGuess(null); setPhase("drilling"); }}
+            className="mt-8 rounded-full border border-primary bg-primary px-8 py-3 font-mono text-sm text-primary-foreground transition-all hover:opacity-90"
+          >
+            🎲 Random city
+          </button>
+
+          <Link to="/" search={{}} className="mt-4 font-mono text-xs text-muted-foreground hover:text-primary">
+            ← Back to drill
+          </Link>
+        </div>
+      )}
+
       {/* Drilling phase */}
       {phase === "drilling" && <DrillDescent onDone={handleDrillDone} />}
 
