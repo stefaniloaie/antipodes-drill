@@ -313,6 +313,13 @@ function GamePage() {
                   </p>
                 </div>
 
+                <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+                  <p className="mono-label text-muted-foreground">Your guess</p>
+                  <p className="mt-2 font-mono text-sm text-foreground">
+                    {guess.lat.toFixed(3)}°, {guess.lng.toFixed(3)}°
+                  </p>
+                </div>
+
                 <div className="rounded-xl border border-primary/30 bg-card p-5 shadow-sm">
                   <p className="mono-label text-primary">Mystery origin revealed</p>
                   <p className="mt-2 text-2xl font-semibold text-foreground" style={{ fontFamily: "var(--font-display)" }}>
