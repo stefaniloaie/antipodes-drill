@@ -50,6 +50,19 @@ function FlyTo({ point }: { point: Point | null }) {
   return null;
 }
 
+function FitBothPoints({ origin, target }: { origin: Point | null; target: Point | null }) {
+  const map = useMap();
+  useEffect(() => {
+    if (!origin || !target) return;
+    const bounds = L.latLngBounds(
+      [origin.lat, origin.lng],
+      [target.lat, target.lng],
+    );
+    map.flyToBounds(bounds, { padding: [60, 60], maxZoom: 5, duration: 1.4 });
+  }, [origin?.lat, origin?.lng, target?.lat, target?.lng, map]);
+  return null;
+}
+
 type NominatimResult = {
   display_name: string;
   lat: string;
@@ -243,6 +256,7 @@ export default function AntipodeMap({
 
           <ClickHandler onPick={(p) => { setFlyTarget(null); onDrill(p); }} />
           <FlyTo point={flyTarget} />
+          <FitBothPoints origin={origin} target={target} />
 
           {origin && (
             <Marker position={[origin.lat, origin.lng]} icon={pulseIcon("#3b9eff")}>
