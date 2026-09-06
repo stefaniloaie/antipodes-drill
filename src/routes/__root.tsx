@@ -92,7 +92,33 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Click any point on the map and watch your drill descend through Earth's layers. Where do you come out? Almost never China.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Antipodes Earth Drill" },
+      { property: "og:locale", content: "en_US" },
+      {
+        property: "og:image",
+        content: "https://earthdrillexplorer.com/og-earth-drill.jpg",
+      },
+      {
+        property: "og:image:secure_url",
+        content: "https://earthdrillexplorer.com/og-earth-drill.jpg",
+      },
+      { property: "og:image:type", content: "image/jpeg" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      {
+        property: "og:image:alt",
+        content: "Antipodes Earth Drill — Interactive Earth Core & Antipode Visualizer",
+      },
       { name: "twitter:card", content: "summary_large_image" },
+      {
+        name: "twitter:image",
+        content: "https://earthdrillexplorer.com/og-earth-drill.jpg",
+      },
+      {
+        name: "twitter:image:alt",
+        content: "Antipodes Earth Drill — Interactive Earth Core & Antipode Visualizer",
+      },
+      { name: "theme-color", content: "#0f172a" },
       { name: "google-adsense-account", content: "ca-pub-6603115789312953" },
     ],
     links: [

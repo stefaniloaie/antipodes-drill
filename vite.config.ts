@@ -8,6 +8,10 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
   vite: {
+    server: {
+      host: "0.0.0.0",
+      port: 3000,
+    },
     // Expose GA_* env vars to the client bundle alongside the default VITE_* vars.
     envPrefix: ["VITE_", "GA_"],
   },

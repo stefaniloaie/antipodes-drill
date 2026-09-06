@@ -1,5 +1,13 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import { MapContainer, TileLayer, Marker, Popup, Polyline, useMapEvents, useMap } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  Polyline,
+  useMapEvents,
+  useMap,
+} from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { antipode, describe, formatCoord, type Point } from "@/lib/geo";
@@ -54,10 +62,7 @@ function FitBothPoints({ origin, target }: { origin: Point | null; target: Point
   const map = useMap();
   useEffect(() => {
     if (!origin || !target) return;
-    const bounds = L.latLngBounds(
-      [origin.lat, origin.lng],
-      [target.lat, target.lng],
-    );
+    const bounds = L.latLngBounds([origin.lat, origin.lng], [target.lat, target.lng]);
     map.flyToBounds(bounds, { padding: [60, 60], maxZoom: 5, duration: 1.4 });
   }, [origin?.lat, origin?.lng, target?.lat, target?.lng, map]);
   return null;
@@ -102,14 +107,20 @@ export default function AntipodeMap({
   const [geoState, setGeoState] = useState<"idle" | "loading" | "denied">("idle");
 
   const searchPlace = useCallback((q: string) => {
-    if (!q.trim()) { setResults([]); return; }
+    if (!q.trim()) {
+      setResults([]);
+      return;
+    }
     setSearching(true);
     fetch(
       `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=6`,
-      { headers: { "Accept-Language": "en" } }
+      { headers: { "Accept-Language": "en" } },
     )
       .then((r) => r.json())
-      .then((data: NominatimResult[]) => { setResults(data); setSearching(false); })
+      .then((data: NominatimResult[]) => {
+        setResults(data);
+        setSearching(false);
+      })
       .catch(() => setSearching(false));
   }, []);
 
@@ -203,7 +214,9 @@ export default function AntipodeMap({
                   className="flex w-full items-start gap-2 px-3 py-2.5 text-left text-sm transition-colors hover:bg-muted"
                 >
                   <span className="mt-0.5 text-primary">⌖</span>
-                  <span className="text-foreground">{r.display_name.split(",").slice(0, 3).join(", ")}</span>
+                  <span className="text-foreground">
+                    {r.display_name.split(",").slice(0, 3).join(", ")}
+                  </span>
                 </button>
               ))}
             </div>
@@ -218,7 +231,13 @@ export default function AntipodeMap({
           >
             Cities
             <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
-              <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+              <path
+                d="M2 3.5L5 6.5L8 3.5"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                fill="none"
+                strokeLinecap="round"
+              />
             </svg>
           </button>
           {dropdownOpen && (
@@ -259,7 +278,10 @@ export default function AntipodeMap({
       </div>
 
       {/* Map */}
-      <div className="relative overflow-hidden rounded-b-xl border border-border" style={{ height: "70vh", minHeight: 480 }}>
+      <div
+        className="relative overflow-hidden rounded-b-xl border border-border"
+        style={{ height: "70vh", minHeight: 480 }}
+      >
         <style>{`
           @keyframes leaflet-pulse {
             0% { box-shadow: 0 0 0 0 currentColor; }
@@ -288,14 +310,20 @@ export default function AntipodeMap({
             maxZoom={19}
           />
 
-          <ClickHandler onPick={(p) => { setFlyTarget(null); onDrill(p); }} />
+          <ClickHandler
+            onPick={(p) => {
+              setFlyTarget(null);
+              onDrill(p);
+            }}
+          />
           <FlyTo point={flyTarget} />
           <FitBothPoints origin={origin} target={target} />
 
           {origin && (
             <Marker position={[origin.lat, origin.lng]} icon={pulseIcon("#3b9eff")}>
               <Popup className="drill-popup">
-                <strong>Origin</strong><br />
+                <strong>Origin</strong>
+                <br />
                 {formatCoord(origin)}
               </Popup>
             </Marker>
@@ -304,8 +332,10 @@ export default function AntipodeMap({
           {target && (
             <Marker position={[target.lat, target.lng]} icon={pulseIcon("#f59e0b")}>
               <Popup className="drill-popup">
-                <strong>Antipode</strong><br />
-                {formatCoord(target)}<br />
+                <strong>Antipode</strong>
+                <br />
+                {formatCoord(target)}
+                <br />
                 <em>{describe(target).place}</em>
               </Popup>
             </Marker>

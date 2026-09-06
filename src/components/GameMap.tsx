@@ -1,5 +1,13 @@
 import { useEffect, useRef } from "react";
-import { MapContainer, TileLayer, Marker, Popup, Polyline, useMapEvents, useMap } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  Polyline,
+  useMapEvents,
+  useMap,
+} from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import type { Point } from "@/lib/geo";
@@ -30,7 +38,11 @@ function questionIcon() {
 }
 
 function ClickHandler({ onPick }: { onPick: (p: Point) => void }) {
-  useMapEvents({ click(e) { onPick({ lat: e.latlng.lat, lng: e.latlng.lng }); } });
+  useMapEvents({
+    click(e) {
+      onPick({ lat: e.latlng.lat, lng: e.latlng.lng });
+    },
+  });
   return null;
 }
 
@@ -40,7 +52,11 @@ function FitBothPoints({ a, b }: { a: Point; b: Point }) {
   useEffect(() => {
     if (fitted.current) return;
     fitted.current = true;
-    map.flyToBounds(L.latLngBounds([a.lat, a.lng], [b.lat, b.lng]), { padding: [80, 80], maxZoom: 5, duration: 1.4 });
+    map.flyToBounds(L.latLngBounds([a.lat, a.lng], [b.lat, b.lng]), {
+      padding: [80, 80],
+      maxZoom: 5,
+      duration: 1.4,
+    });
   }, [a, b, map]);
   return null;
 }
@@ -57,8 +73,14 @@ function lineSegments(a: Point, b: Point): [number, number][][] {
   if (Math.abs(b.lng - a.lng) > 180) {
     const mid = (a.lat + b.lat) / 2;
     return a.lng > 0
-      ? [[pa, [mid, 180]], [[mid, -180], pb]]
-      : [[pa, [mid, -180]], [[mid, 180], pb]];
+      ? [
+          [pa, [mid, 180]],
+          [[mid, -180], pb],
+        ]
+      : [
+          [pa, [mid, -180]],
+          [[mid, 180], pb],
+        ];
   }
   return [[pa, pb]];
 }
@@ -69,9 +91,15 @@ export function PickMap({ onPick }: { onPick: (p: Point) => void }) {
   return (
     <div className="relative flex-1" style={{ minHeight: "calc(100vh - 140px)" }}>
       <style>{MAP_STYLES}</style>
-      <MapContainer center={[20, 0]} zoom={2} minZoom={2} maxZoom={18}
+      <MapContainer
+        center={[20, 0]}
+        zoom={2}
+        minZoom={2}
+        maxZoom={18}
         style={{ height: "100%", width: "100%", minHeight: "calc(100vh - 140px)" }}
-        worldCopyJump className="z-0 cursor-crosshair">
+        worldCopyJump
+        className="z-0 cursor-crosshair"
+      >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -79,7 +107,10 @@ export function PickMap({ onPick }: { onPick: (p: Point) => void }) {
         />
         <ClickHandler onPick={onPick} />
       </MapContainer>
-      <div className="pointer-events-none absolute inset-0 flex items-end justify-center pb-10" style={{ zIndex: 400 }}>
+      <div
+        className="pointer-events-none absolute inset-0 flex items-end justify-center pb-10"
+        style={{ zIndex: 400 }}
+      >
         <div className="rounded-full border border-primary/30 bg-background/80 px-5 py-2 font-mono text-xs tracking-widest text-primary/70 backdrop-blur-sm uppercase">
           Click anywhere to set your drill site
         </div>
@@ -94,9 +125,15 @@ export function GuessMap({ guess, onPick }: { guess: Point | null; onPick: (p: P
   return (
     <div className="relative flex-1" style={{ minHeight: "calc(100vh - 160px)" }}>
       <style>{MAP_STYLES}</style>
-      <MapContainer center={[20, 0]} zoom={2} minZoom={2} maxZoom={18}
+      <MapContainer
+        center={[20, 0]}
+        zoom={2}
+        minZoom={2}
+        maxZoom={18}
         style={{ height: "100%", width: "100%", minHeight: "calc(100vh - 160px)" }}
-        worldCopyJump className="z-0">
+        worldCopyJump
+        className="z-0"
+      >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -115,7 +152,10 @@ export function GuessMap({ guess, onPick }: { guess: Point | null; onPick: (p: P
         )}
       </MapContainer>
       {!guess && (
-        <div className="pointer-events-none absolute inset-0 flex items-end justify-center pb-10" style={{ zIndex: 400 }}>
+        <div
+          className="pointer-events-none absolute inset-0 flex items-end justify-center pb-10"
+          style={{ zIndex: 400 }}
+        >
           <div className="rounded-full border border-primary/30 bg-background/80 px-5 py-2 font-mono text-xs tracking-widest text-primary/70 backdrop-blur-sm uppercase">
             Click anywhere on the map to place your guess
           </div>
@@ -128,15 +168,30 @@ export function GuessMap({ guess, onPick }: { guess: Point | null; onPick: (p: P
 // ── Result map ─────────────────────────────────────────────────────────────────
 
 export function ResultMap({
-  guess, actual, originName,
-}: { guess: Point; actual: Point; originName: string }) {
+  guess,
+  actual,
+  originName,
+}: {
+  guess: Point;
+  actual: Point;
+  originName: string;
+}) {
   const segs = lineSegments(guess, actual);
   return (
-    <div className="overflow-hidden rounded-xl border border-border shadow-sm" style={{ minHeight: 480 }}>
+    <div
+      className="overflow-hidden rounded-xl border border-border shadow-sm"
+      style={{ minHeight: 480 }}
+    >
       <style>{MAP_STYLES}</style>
-      <MapContainer center={[20, 0]} zoom={2} minZoom={2} maxZoom={18}
+      <MapContainer
+        center={[20, 0]}
+        zoom={2}
+        minZoom={2}
+        maxZoom={18}
         style={{ height: "100%", width: "100%", minHeight: 480 }}
-        worldCopyJump className="z-0">
+        worldCopyJump
+        className="z-0"
+      >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -144,13 +199,25 @@ export function ResultMap({
         />
         <FitBothPoints a={guess} b={actual} />
         <Marker position={[guess.lat, guess.lng]} icon={pulseIcon("#f59e0b")}>
-          <Popup><strong>Your guess</strong><br />{guess.lat.toFixed(3)}°, {guess.lng.toFixed(3)}°</Popup>
+          <Popup>
+            <strong>Your guess</strong>
+            <br />
+            {guess.lat.toFixed(3)}°, {guess.lng.toFixed(3)}°
+          </Popup>
         </Marker>
         <Marker position={[actual.lat, actual.lng]} icon={pulseIcon("#ef4444")}>
-          <Popup><strong>Actual antipode of {originName}</strong><br />{actual.lat.toFixed(3)}°, {actual.lng.toFixed(3)}°</Popup>
+          <Popup>
+            <strong>Actual antipode of {originName}</strong>
+            <br />
+            {actual.lat.toFixed(3)}°, {actual.lng.toFixed(3)}°
+          </Popup>
         </Marker>
         {segs.map((seg, i) => (
-          <Polyline key={i} positions={seg} pathOptions={{ color: "#ef4444", weight: 2, opacity: 0.7, dashArray: "6 5" }} />
+          <Polyline
+            key={i}
+            positions={seg}
+            pathOptions={{ color: "#ef4444", weight: 2, opacity: 0.7, dashArray: "6 5" }}
+          />
         ))}
       </MapContainer>
     </div>

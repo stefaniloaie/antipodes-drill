@@ -32,7 +32,10 @@ export default function Globe({
   // Initial spin-to-target animation
   useEffect(() => {
     const to: [number, number] = [-target.lng, -target.lat];
-    if (!spin) { setRot(to); return; }
+    if (!spin) {
+      setRot(to);
+      return;
+    }
     const from: [number, number] = [to[0] - 120, to[1] - 25];
     const t0 = performance.now();
     const dur = 1600;
@@ -43,50 +46,67 @@ export default function Globe({
       if (k < 1) raf.current = requestAnimationFrame(step);
     };
     raf.current = requestAnimationFrame(step);
-    return () => { if (raf.current) cancelAnimationFrame(raf.current); };
+    return () => {
+      if (raf.current) cancelAnimationFrame(raf.current);
+    };
   }, [target.lat, target.lng, spin]);
 
   // Drag-to-rotate
-  const onPointerDown = useCallback((e: React.PointerEvent<SVGSVGElement>) => {
-    if (raf.current) { cancelAnimationFrame(raf.current); raf.current = null; }
-    svgRef.current?.setPointerCapture(e.pointerId);
-    drag.current = { x: e.clientX, y: e.clientY, rot: [...rot] as [number, number] };
-  }, [rot]);
-
-  const onPointerMove = useCallback((e: React.PointerEvent<SVGSVGElement>) => {
-    if (!drag.current) {
-      // hover tooltip
-      if (!svgRef.current) return;
-      const rect = svgRef.current.getBoundingClientRect();
-      const sx = ((e.clientX - rect.left) / rect.width) * SIZE;
-      const sy = ((e.clientY - rect.top) / rect.height) * SIZE;
-      const dx = sx - cx, dy = sy - cy;
-      const effectiveR = R * scale;
-      if (dx * dx + dy * dy > effectiveR * effectiveR) { setHover(null); return; }
-      // unproject using current rotation
-      const proj = geoOrthographic()
-        .fitSize([SIZE - 20, SIZE - 20], { type: "Sphere" })
-        .translate([cx, cy])
-        .scale(R * scale)
-        .rotate(rot);
-      const coords = proj.invert?.([sx, sy]);
-      if (coords) {
-        const p: Point = { lng: coords[0], lat: coords[1] };
-        const name = countryAt(p) ?? oceanAt(p);
-        setHover(name);
+  const onPointerDown = useCallback(
+    (e: React.PointerEvent<SVGSVGElement>) => {
+      if (raf.current) {
+        cancelAnimationFrame(raf.current);
+        raf.current = null;
       }
-      return;
-    }
-    const dx = e.clientX - drag.current.x;
-    const dy = e.clientY - drag.current.y;
-    const sensitivity = 0.35 / scale;
-    setRot([
-      drag.current.rot[0] + dx * sensitivity,
-      Math.max(-90, Math.min(90, drag.current.rot[1] - dy * sensitivity)),
-    ]);
-  }, [rot, scale]);
+      svgRef.current?.setPointerCapture(e.pointerId);
+      drag.current = { x: e.clientX, y: e.clientY, rot: [...rot] as [number, number] };
+    },
+    [rot],
+  );
 
-  const onPointerUp = useCallback(() => { drag.current = null; }, []);
+  const onPointerMove = useCallback(
+    (e: React.PointerEvent<SVGSVGElement>) => {
+      if (!drag.current) {
+        // hover tooltip
+        if (!svgRef.current) return;
+        const rect = svgRef.current.getBoundingClientRect();
+        const sx = ((e.clientX - rect.left) / rect.width) * SIZE;
+        const sy = ((e.clientY - rect.top) / rect.height) * SIZE;
+        const dx = sx - cx,
+          dy = sy - cy;
+        const effectiveR = R * scale;
+        if (dx * dx + dy * dy > effectiveR * effectiveR) {
+          setHover(null);
+          return;
+        }
+        // unproject using current rotation
+        const proj = geoOrthographic()
+          .fitSize([SIZE - 20, SIZE - 20], { type: "Sphere" })
+          .translate([cx, cy])
+          .scale(R * scale)
+          .rotate(rot);
+        const coords = proj.invert?.([sx, sy]);
+        if (coords) {
+          const p: Point = { lng: coords[0], lat: coords[1] };
+          const name = countryAt(p) ?? oceanAt(p);
+          setHover(name);
+        }
+        return;
+      }
+      const dx = e.clientX - drag.current.x;
+      const dy = e.clientY - drag.current.y;
+      const sensitivity = 0.35 / scale;
+      setRot([
+        drag.current.rot[0] + dx * sensitivity,
+        Math.max(-90, Math.min(90, drag.current.rot[1] - dy * sensitivity)),
+      ]);
+    },
+    [rot, scale],
+  );
+
+  const onPointerUp = useCallback(() => {
+    drag.current = null;
+  }, []);
 
   // Scroll to zoom
   const onWheel = useCallback((e: React.WheelEvent<SVGSVGElement>) => {
@@ -156,7 +176,10 @@ export default function Globe({
           </filter>
           <filter id="markerGlow" x="-200%" y="-200%" width="500%" height="500%">
             <feGaussianBlur stdDeviation="3" result="b" />
-            <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+            <feMerge>
+              <feMergeNode in="b" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
           </filter>
           <clipPath id="globeClip">
             <circle cx={cx} cy={cy} r={R * scale + 1} />
@@ -164,10 +187,25 @@ export default function Globe({
         </defs>
 
         {/* Atmosphere halo */}
-        <circle cx={cx} cy={cy} r={R * scale + 16} fill="none" stroke="var(--primary)"
-          strokeWidth={28} strokeOpacity={0.09} filter="url(#atmosBlur)" />
-        <circle cx={cx} cy={cy} r={R * scale + 4} fill="none" stroke="var(--primary)"
-          strokeWidth={4} strokeOpacity={0.13} />
+        <circle
+          cx={cx}
+          cy={cy}
+          r={R * scale + 16}
+          fill="none"
+          stroke="var(--primary)"
+          strokeWidth={28}
+          strokeOpacity={0.09}
+          filter="url(#atmosBlur)"
+        />
+        <circle
+          cx={cx}
+          cy={cy}
+          r={R * scale + 4}
+          fill="none"
+          stroke="var(--primary)"
+          strokeWidth={4}
+          strokeOpacity={0.13}
+        />
 
         {/* Ocean */}
         <path d={sphere} fill="url(#gOcean)" stroke="var(--border)" strokeWidth={0.6} />
@@ -206,8 +244,20 @@ export default function Globe({
               <animate attributeName="opacity" values="1;0" dur="2s" repeatCount="indefinite" />
             </circle>
             <circle r={7} fill="none" stroke="var(--accent)" strokeWidth={1}>
-              <animate attributeName="r" values="9;28" dur="2s" begin="0.65s" repeatCount="indefinite" />
-              <animate attributeName="opacity" values="0.7;0" dur="2s" begin="0.65s" repeatCount="indefinite" />
+              <animate
+                attributeName="r"
+                values="9;28"
+                dur="2s"
+                begin="0.65s"
+                repeatCount="indefinite"
+              />
+              <animate
+                attributeName="opacity"
+                values="0.7;0"
+                dur="2s"
+                begin="0.65s"
+                repeatCount="indefinite"
+              />
             </circle>
           </g>
         )}

@@ -19,9 +19,7 @@ declare global {
 }
 
 export const GA_MEASUREMENT_ID: string | undefined =
-  (import.meta.env["VITE_LOVABLE_CONNECTOR_GOOGLE_ANALYTICS_API_KEY"] as
-    | string
-    | undefined) ||
+  (import.meta.env["VITE_LOVABLE_CONNECTOR_GOOGLE_ANALYTICS_API_KEY"] as string | undefined) ||
   (import.meta.env["VITE_GA_MEASUREMENT_ID"] as string | undefined) ||
   (import.meta.env["GA_MEASUREMENT_ID"] as string | undefined) ||
   "G-DKG4BJJDRR";

@@ -49,10 +49,7 @@ export default function WorldMap({
 
   function toSvgCoords(e: React.MouseEvent<SVGSVGElement>): [number, number] {
     const rect = svgRef.current!.getBoundingClientRect();
-    return [
-      ((e.clientX - rect.left) / rect.width) * W,
-      ((e.clientY - rect.top) / rect.height) * H,
-    ];
+    return [((e.clientX - rect.left) / rect.width) * W, ((e.clientY - rect.top) / rect.height) * H];
   }
 
   function handleClick(e: React.MouseEvent<SVGSVGElement>) {
@@ -67,7 +64,10 @@ export default function WorldMap({
   function handleMouseMove(e: React.MouseEvent<SVGSVGElement>) {
     const [x, y] = toSvgCoords(e);
     const c = invert([x, y]);
-    if (!c) { setTooltip(null); return; }
+    if (!c) {
+      setTooltip(null);
+      return;
+    }
     const p: Point = { lng: c[0], lat: c[1] };
     const name = countryAt(p) ?? oceanAt(p);
     const screenX = (x / W) * svgRef.current!.getBoundingClientRect().width;
@@ -109,7 +109,13 @@ export default function WorldMap({
             <stop offset="100%" stopColor="var(--background)" stopOpacity={0.72} />
           </radialGradient>
           <filter id="landRelief" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="1.4" stdDeviation="1.6" floodColor="#000" floodOpacity={0.18} />
+            <feDropShadow
+              dx="0"
+              dy="1.4"
+              stdDeviation="1.6"
+              floodColor="#000"
+              floodOpacity={0.18}
+            />
           </filter>
           <filter id="markerGlow" x="-300%" y="-300%" width="700%" height="700%">
             <feGaussianBlur stdDeviation="3" result="b" />
@@ -119,7 +125,13 @@ export default function WorldMap({
             </feMerge>
           </filter>
           <filter id="labelShadow" x="-10%" y="-30%" width="120%" height="160%">
-            <feDropShadow dx="0" dy="0" stdDeviation="3" floodColor="var(--ocean-deep)" floodOpacity={0.7} />
+            <feDropShadow
+              dx="0"
+              dy="0"
+              stdDeviation="3"
+              floodColor="var(--ocean-deep)"
+              floodOpacity={0.7}
+            />
           </filter>
         </defs>
 
@@ -169,14 +181,23 @@ export default function WorldMap({
         {/* Drill line — animated dash */}
         {o && t && (
           <line
-            x1={o[0]} y1={o[1]} x2={t[0]} y2={t[1]}
+            x1={o[0]}
+            y1={o[1]}
+            x2={t[0]}
+            y2={t[1]}
             stroke="var(--primary)"
             strokeWidth={1.4}
             strokeDasharray="6 5"
             opacity={0.7}
             filter="url(#markerGlow)"
           >
-            <animate attributeName="stroke-dashoffset" from="0" to="-110" dur="2.2s" repeatCount="indefinite" />
+            <animate
+              attributeName="stroke-dashoffset"
+              from="0"
+              to="-110"
+              dur="2.2s"
+              repeatCount="indefinite"
+            />
           </line>
         )}
 

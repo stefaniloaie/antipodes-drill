@@ -1,0 +1,6 @@
+{
+  "name": "Antipodes Earth Drill",
+  "description": "Interactive map and visualization tool that calculates antipodes and simulates drilling straight through the Earth's core to the other side.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

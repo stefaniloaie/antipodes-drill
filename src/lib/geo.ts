@@ -8,10 +8,10 @@ type CountryProps = { name?: string };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const world = topo as any;
 
-export const countries = feature(
-  world,
-  world.objects.countries,
-) as unknown as FeatureCollection<Geometry, CountryProps>;
+export const countries = feature(world, world.objects.countries) as unknown as FeatureCollection<
+  Geometry,
+  CountryProps
+>;
 
 export type Point = { lat: number; lng: number };
 

@@ -5,8 +5,7 @@ import { useEffect, useRef } from "react";
  * Override with VITE_ADSENSE_CLIENT in your env if you ever need to switch accounts.
  */
 export const ADSENSE_CLIENT: string =
-  (import.meta.env["VITE_ADSENSE_CLIENT"] as string | undefined) ??
-  "ca-pub-6603115789312953";
+  (import.meta.env["VITE_ADSENSE_CLIENT"] as string | undefined) ?? "ca-pub-6603115789312953";
 
 let scriptInjected = false;
 
