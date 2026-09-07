@@ -185,6 +185,23 @@ export const Route = createFileRoute("/game")({
           typicalAgeRange: "10-",
         }),
       },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Earth Drill Map",
+              item: "https://earthdrillexplorer.com/",
+            },
+            { "@type": "ListItem", position: 2, name: "Antipode Guessing Game", item: GAME_URL },
+          ],
+        }),
+      },
+
     ],
   }),
   component: GamePage,
