@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useState, lazy, Suspense } from "react";
+import ClientOnly from "@/components/ClientOnly";
 import DrillDescent from "@/components/DrillDescent";
 import { antipode, type Point } from "@/lib/geo";
 
@@ -270,19 +271,23 @@ function GamePage() {
               </div>
             </div>
           </div>
-          <Suspense fallback={MapFallback}>
-            <LazyPickMap
-              onPick={(p) => {
-                setOrigin({
-                  name: `${p.lat.toFixed(2)}°, ${p.lng.toFixed(2)}°`,
-                  lat: p.lat,
-                  lng: p.lng,
-                });
-                setGuess(null);
-                setPhase("drilling");
-              }}
-            />
-          </Suspense>
+          <ClientOnly fallback={MapFallback}>
+            {() => (
+              <Suspense fallback={MapFallback}>
+                <LazyPickMap
+                  onPick={(p) => {
+                    setOrigin({
+                      name: `${p.lat.toFixed(2)}°, ${p.lng.toFixed(2)}°`,
+                      lat: p.lat,
+                      lng: p.lng,
+                    });
+                    setGuess(null);
+                    setPhase("drilling");
+                  }}
+                />
+              </Suspense>
+            )}
+          </ClientOnly>
         </div>
       )}
 
@@ -334,9 +339,13 @@ function GamePage() {
             </div>
           )}
 
-          <Suspense fallback={MapFallback}>
-            <LazyGuessMap guess={guess} onPick={setGuess} />
-          </Suspense>
+          <ClientOnly fallback={MapFallback}>
+            {() => (
+              <Suspense fallback={MapFallback}>
+                <LazyGuessMap guess={guess} onPick={setGuess} />
+              </Suspense>
+            )}
+          </ClientOnly>
         </div>
       )}
 
@@ -454,7 +463,7 @@ function GamePage() {
               </div>
 
               {/* Result map */}
-              <Suspense
+              <ClientOnly
                 fallback={
                   <div
                     className="flex items-center justify-center rounded-xl border border-border"
@@ -464,8 +473,21 @@ function GamePage() {
                   </div>
                 }
               >
-                <LazyResultMap guess={guess} actual={actualAntipode} originName={origin.name} />
-              </Suspense>
+                {() => (
+                  <Suspense
+                    fallback={
+                      <div
+                        className="flex items-center justify-center rounded-xl border border-border"
+                        style={{ minHeight: 480 }}
+                      >
+                        <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                      </div>
+                    }
+                  >
+                    <LazyResultMap guess={guess} actual={actualAntipode} originName={origin.name} />
+                  </Suspense>
+                )}
+              </ClientOnly>
             </div>
           </div>
         </div>
