@@ -84,59 +84,14 @@ export const Route = createFileRoute("/")({
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "FAQPage",
-          mainEntity: [
-            {
-              "@type": "Question",
-              name: "What is an antipode?",
-              acceptedAnswer: {
-                "@type": "Answer",
-                text: "An antipode is the point on Earth's surface directly opposite another point — the place you'd emerge if you dug straight through the planet's center. Antipodal coordinates are simply the negation of latitude and the longitude shifted by 180°.",
-              },
-            },
-            {
-              "@type": "Question",
-              name: "If you dig through Earth from the US, where do you come out?",
-              acceptedAnswer: {
-                "@type": "Answer",
-                text: "Digging straight through Earth from anywhere in the continental US would land you in the Indian Ocean, south of Australia. China is not antipodal to the US — that's a myth.",
-              },
-            },
-            {
-              "@type": "Question",
-              name: "Is it true that digging from China brings you to the US?",
-              acceptedAnswer: {
-                "@type": "Answer",
-                text: "No. Both China and the US are in the northern hemisphere. China's antipode is in the South Atlantic Ocean near Argentina. The antipode of mainland USA is the Indian Ocean.",
-              },
-            },
-            {
-              "@type": "Question",
-              name: "How deep is the Earth?",
-              acceptedAnswer: {
-                "@type": "Answer",
-                text: "Earth's diameter is 12,742 km. A straight drill from surface to surface passes through the crust (~35 km), upper mantle (to 660 km), lower mantle (to 2,890 km), liquid outer core (to 5,150 km), and solid inner core at ~5,400 °C.",
-              },
-            },
-            {
-              "@type": "Question",
-              name: "Which countries have land-to-land antipodes?",
-              acceptedAnswer: {
-                "@type": "Answer",
-                text: "Very few country pairs are land-to-land antipodal. The most notable: Spain and New Zealand, Argentina and China (roughly), and some Pacific island nations. Over 90% of all land is antipodal to ocean.",
-              },
-            },
-            {
-              "@type": "Question",
-              name: "What is the antipode of London?",
-              acceptedAnswer: {
-                "@type": "Answer",
-                text: "The antipode of London (51.5°N, 0.1°W) is approximately 51.5°S, 179.9°E — in the South Pacific Ocean, about 2,000 km east of New Zealand. Not China.",
-              },
-            },
-          ],
+          "@type": "WebSite",
+          name: "Antipodes Earth Drill",
+          url: SITE_URL,
+          description:
+            "Interactive antipode explorer: click any point on Earth and see exactly where you would come out on the other side.",
         }),
       },
+
     ],
   }),
   component: Index,
