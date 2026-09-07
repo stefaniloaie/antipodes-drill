@@ -68,6 +68,23 @@ export const Route = createFileRoute("/dig-to-china")({
           },
         }),
       },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Earth Drill Map",
+              item: "https://earthdrillexplorer.com/",
+            },
+            { "@type": "ListItem", position: 2, name: "Digging to China?", item: PAGE_URL },
+          ],
+        }),
+      },
+
     ],
   }),
   component: DigToChina,
