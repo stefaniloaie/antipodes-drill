@@ -185,6 +185,23 @@ export const Route = createFileRoute("/game")({
           typicalAgeRange: "10-",
         }),
       },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Earth Drill Map",
+              item: "https://earthdrillexplorer.com/",
+            },
+            { "@type": "ListItem", position: 2, name: "Antipode Guessing Game", item: GAME_URL },
+          ],
+        }),
+      },
+
     ],
   }),
   component: GamePage,
@@ -492,6 +509,29 @@ function GamePage() {
           </div>
         </div>
       )}
+      <footer className="border-t border-border bg-card px-6 py-8">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3">
+          <p className="font-mono text-xs text-muted-foreground">
+            Earth radius 6 371 km · core ≈ 5 400 °C · antipode = (−lat, lng ± 180°)
+          </p>
+          <div className="flex gap-4 font-mono text-xs">
+            <Link
+              to="/"
+              search={{}}
+              className="text-muted-foreground transition-colors hover:text-primary"
+            >
+              Drill through Earth on the map
+            </Link>
+            <Link
+              to="/dig-to-china"
+              className="text-muted-foreground transition-colors hover:text-primary"
+            >
+              Why you can't dig to China
+            </Link>
+          </div>
+        </div>
+      </footer>
     </main>
+
   );
 }
