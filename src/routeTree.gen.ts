@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DigToChinaRouteImport } from './routes/dig-to-china'
+import { Route as EarthSandwichRouteImport } from './routes/earth-sandwich'
 import { Route as GameRouteImport } from './routes/game'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 
@@ -22,6 +23,11 @@ const IndexRoute = IndexRouteImport.update({
 const DigToChinaRoute = DigToChinaRouteImport.update({
   id: '/dig-to-china',
   path: '/dig-to-china',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EarthSandwichRoute = EarthSandwichRouteImport.update({
+  id: '/earth-sandwich',
+  path: '/earth-sandwich',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GameRoute = GameRouteImport.update({
@@ -38,12 +44,14 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dig-to-china': typeof DigToChinaRoute
+  '/earth-sandwich': typeof EarthSandwichRoute
   '/game': typeof GameRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dig-to-china': typeof DigToChinaRoute
+  '/earth-sandwich': typeof EarthSandwichRoute
   '/game': typeof GameRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
 }
@@ -51,20 +59,29 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dig-to-china': typeof DigToChinaRoute
+  '/earth-sandwich': typeof EarthSandwichRoute
   '/game': typeof GameRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dig-to-china' | '/game' | '/sitemap.xml'
+  fullPaths:
+    '/' | '/dig-to-china' | '/earth-sandwich' | '/game' | '/sitemap.xml'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dig-to-china' | '/game' | '/sitemap.xml'
-  id: '__root__' | '/' | '/dig-to-china' | '/game' | '/sitemap.xml'
+  to: '/' | '/dig-to-china' | '/earth-sandwich' | '/game' | '/sitemap.xml'
+  id:
+    | '__root__'
+    | '/'
+    | '/dig-to-china'
+    | '/earth-sandwich'
+    | '/game'
+    | '/sitemap.xml'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DigToChinaRoute: typeof DigToChinaRoute
+  EarthSandwichRoute: typeof EarthSandwichRoute
   GameRoute: typeof GameRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
@@ -83,6 +100,13 @@ declare module '@tanstack/react-router' {
       path: '/dig-to-china'
       fullPath: '/dig-to-china'
       preLoaderRoute: typeof DigToChinaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/earth-sandwich': {
+      id: '/earth-sandwich'
+      path: '/earth-sandwich'
+      fullPath: '/earth-sandwich'
+      preLoaderRoute: typeof EarthSandwichRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/game': {
@@ -105,6 +129,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DigToChinaRoute: DigToChinaRoute,
+  EarthSandwichRoute: EarthSandwichRoute,
   GameRoute: GameRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
 }

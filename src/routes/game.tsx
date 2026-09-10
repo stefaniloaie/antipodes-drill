@@ -528,6 +528,12 @@ function GamePage() {
             >
               Why you can't dig to China
             </Link>
+            <Link
+              to="/earth-sandwich"
+              className="text-muted-foreground transition-colors hover:text-primary"
+            >
+              Earth Sandwich challenge
+            </Link>
           </div>
         </div>
       </footer>
