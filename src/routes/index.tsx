@@ -902,6 +902,12 @@ function Index() {
             >
               Digging to China?
             </Link>
+            <Link
+              to="/earth-sandwich"
+              className="text-muted-foreground transition-colors hover:text-primary"
+            >
+              Earth Sandwich challenge
+            </Link>
             <Link to="/game" className="text-muted-foreground transition-colors hover:text-primary">
               Guessing game
             </Link>
