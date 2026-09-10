@@ -579,6 +579,12 @@ function Index() {
             >
               🎮 Play the guessing game
             </Link>
+            <Link
+              to="/earth-sandwich"
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-5 py-2 font-mono text-sm text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+            >
+              🥪 Earth Sandwich challenge
+            </Link>
           </div>
         </div>
       </section>
